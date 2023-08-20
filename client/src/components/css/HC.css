@@ -1,0 +1,120 @@
+.Log {
+    
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    animation: fade-in-up 500ms ease-out forwards;
+}
+
+.Reg {
+    
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    animation: fade-in-up 500ms ease-out forwards;
+}
+
+.Car {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    animation: fade-in-up 500ms ease-out;
+    margin-bottom: 2%;
+}
+
+.Hom {
+    margin: 2% 10%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+}
+
+.Pro {
+    margin: 5% 10%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    animation: fade-in-up 500ms ease-out;
+}
+
+.innerFeed {
+    display: flex;
+    flex-wrap: wrap;
+    align-self: center;
+    justify-self: center;
+}
+
+.Bar {
+    display: flex;
+    align-self: flex-end;
+    justify-content: end;
+    margin: 1%;
+    color:aliceblue;
+    animation: fade-in-down 500ms ease-out;
+}
+
+
+.Desc {
+    background-color: lightgray;
+    padding: 2%;
+    margin: 1%;
+    border-radius: 15px;
+}
+.haus {
+    overflow: auto;
+}
+
+
+@keyframes fade-in-up {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-in-down {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+}
+
+.heading {
+    position: relative;
+    padding: 2%;
+    margin: 1%;
+}
+
+.CarEx {
+    margin: 2%;
+}
+
+.Cre {
+    margin: 2% 10%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+}
+
+.innerfeed{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
