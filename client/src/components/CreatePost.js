@@ -23,7 +23,7 @@ function CreatePost() {
           photo,
         },
       });
-    
+
       console.log(data);
       setContent('');
       setPhoto(null);
@@ -37,31 +37,31 @@ function CreatePost() {
   const handlePhotoChange = (event) => {
     const file = event.target.files[0];
     if (!file) return;
-  
+
     setPhoto(file);
-  
+
     let reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {
       setPreview(reader.result);
-  
+
       // Send the file to the server for analysis
       let formData = new FormData();
       formData.append('image', file);
-  
+
       fetch('http://localhost:3001/check-image', {
         method: 'POST',
         body: formData,
       })
-      .then(res => res.json())
-      .then(data => {
-        if (data.containsJackieChan) {
-          alert("Jackie Chan detected in image!");
-        } else {
-          alert("No Jackie Chan detected in image.");
-        }
-      })
-      .catch(error => console.error('Error checking image:', error));
+        .then(res => res.json())
+        .then(data => {
+          if (data.containsJackieChan) {
+            alert("Jackie Chan detected in image!");
+          } else {
+            alert("No Jackie Chan detected in image.");
+          }
+        })
+        .catch(error => console.error('Error checking image:', error));
     };
   };
 
@@ -99,35 +99,35 @@ function CreatePost() {
             </Card>
           )}
 
-        <TextField
-        
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          label="Post Content"
-          variant="outlined"
-          fullWidth
-          multiline
-          rows={4}
-          margin="normal"
-        />
-        <label htmlFor="upload-photo">
-          <input
-            accept="image/*"
-            id="upload-photo"
-            type="file"
-            hidden
-            onChange={handlePhotoChange}
+          <TextField
+
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            label="Post Content"
+            variant="outlined"
+            fullWidth
+            multiline
+            rows={4}
+            margin="normal"
           />
-          <Button variant="contained" component="span" style={{ marginTop: '1rem', marginRight: '1rem', backgroundColor: 'grey' }}>
-            Choose Photo
+          <label htmlFor="upload-photo">
+            <input
+              accept="image/*"
+              id="upload-photo"
+              type="file"
+              hidden
+              onChange={handlePhotoChange}
+            />
+            <Button variant="contained" component="span" style={{ marginTop: '1rem', marginRight: '1rem', backgroundColor: 'grey' }}>
+              Choose Photo
+            </Button>
+          </label>
+          <Button type="submit" variant="contained" style={{ marginTop: '1rem', backgroundColor: 'grey' }}>
+            Create Post
           </Button>
-        </label>
-        <Button type="submit" variant="contained" style={{ marginTop: '1rem', backgroundColor: 'grey' }}>
-          Create Post
-        </Button>
-        {error && <p>Error creating post: {error.message}</p>}
-      </form>
-    </Box>
+          {error && <p>Error creating post: {error.message}</p>}
+        </form>
+      </Box>
     </div>
   );
 }

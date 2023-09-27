@@ -1,19 +1,19 @@
 import { useQuery } from "@apollo/client";
 import Box from '@mui/material/Box';
-import PostCard from "./Card";
+import PostCard from "../components/Card";
 import Button from '@mui/material/Button';
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import { Link } from 'react-router-dom';
 import jwt_decode from "jwt-decode";
 import { GET_PERSONALIZED_POSTS } from "../graphql/queries";
-import './css/HC.css';
+
 
 export default function Home() {
     // Get the current userId from the token
     const token = localStorage.getItem('id_token');
     const decodedToken = jwt_decode(token);
     const currentUserId = decodedToken.data._id;
-    
+
     const { loading, error, data } = useQuery(GET_PERSONALIZED_POSTS, {
         variables: { userId: currentUserId }
     });
@@ -33,13 +33,13 @@ export default function Home() {
         <div className="Hom">
             <div className='makeapost'>
                 <Link to='/createpost'>
-                    <Button 
-                        className='postBtn' 
-                        style={{ color: 'white', backgroundColor: 'grey' }} 
-                        variant='contained' 
+                    <Button
+                        className='postBtn'
+                        style={{ color: 'white', backgroundColor: 'grey' }}
+                        variant='contained'
                         endIcon={<AddTwoToneIcon />}
                     >
-                        Add Post 
+                        Add Post
                     </Button>
                 </Link>
             </div>
@@ -60,15 +60,15 @@ export default function Home() {
                     },
                 }}
             >
-                 <div 
-                    className='innerFeed' 
-                    style={{ 
-                        position: 'absolute', 
-                        height: '80%', 
-                        top: '55%', 
-                        left: '50%', 
-                        transform: 'translate(-50%, -50%)', 
-                        overflow: 'auto' 
+                <div
+                    className='innerFeed'
+                    style={{
+                        position: 'absolute',
+                        height: '80%',
+                        top: '55%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        overflow: 'auto'
                     }}
                 >
                     {posts.map(post => (

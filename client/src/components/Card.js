@@ -56,7 +56,7 @@ export default function PostCard({ post }) {
 
 
   const handleCommentSubmit = async (postId) => {
- 
+
     try {
       await addComment({
         variables: {
@@ -73,7 +73,7 @@ export default function PostCard({ post }) {
             return; // Exit if post data is not in the cache
           }
 
-        
+
 
           const updatedPost = {
             ...existingPostData.post,
@@ -103,7 +103,7 @@ export default function PostCard({ post }) {
   };
 
   const handleDeleteComment = async (postId, commentId) => {
-    try {  
+    try {
       await deleteComment({
         variables: { postId, commentId },
 
@@ -242,7 +242,7 @@ export default function PostCard({ post }) {
             const updatedLikes = cachedPost.likes.filter(
               (like) => like.user && like.user._id !== currentUser._id
             );
-            
+
             cache.writeFragment({
               id: `Post:${postId}`,
               fragment: gql`

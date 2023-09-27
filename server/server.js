@@ -13,31 +13,27 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 const jwtSecret = process.env.JWT_SECRET;
 
-// Set up CORS with options
-app.use(cors({
-  origin: ['https://social-space-615b764ada9e.herokuapp.com'], // allow only this origin to make requests
+const corsOptions = {
+  origin: ['https://social-space-615b764ada9e.herokuapp.com', 'http://localhost:3000'],
   credentials: true,
   methods: ["GET", "POST"],
-}));
+};
+
+
+app.use(cors(corsOptions));
 
 const getUserFromToken = async (token) => {
   if (!token) {
     console.log("Token not provided");
     return null;
   }
-  //super 
   try {
     if (token.startsWith('Bearer ')) {
       token = token.slice(7, token.length).trimLeft();
     }
 
-
     const { data } = jwt.verify(token, jwtSecret);
-
-
     const user = await User.findById(data._id);
-
-
     return user;
   } catch (err) {
     console.error("Error in getUserFromToken:", err);
@@ -45,22 +41,21 @@ const getUserFromToken = async (token) => {
   }
 };
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  context: async ({ req }) => {
-    const token = req.headers.authorization || '';
-    const user = await getUserFromToken(token);
-    return { user };
-  },
-  uploads: false
-});
-
 (async function () {
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context: async ({ req }) => {
+      const token = req.headers.authorization || '';
+      const user = await getUserFromToken(token);
+      return { user };
+    },
+    uploads: false,
+  });
+
   await server.start();
 
   app.use((req, res, next) => {
-
     if (req.is('text/*')) {
       req.text().then(txt => {
         console.log('Request body:', txt);
@@ -71,16 +66,14 @@ const server = new ApolloServer({
     }
   });
 
-
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
 
   // Add middleware for handling uploads
   app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
 
-
-  server.applyMiddleware({ app, cors: false });
-  
+  // Apply Apollo Server middleware with CORS
+  server.applyMiddleware({ app, cors: corsOptions });
 
   if (process.env.NODE_ENV === 'production') {
     app.use(express.static('../client/build'));
@@ -88,7 +81,6 @@ const server = new ApolloServer({
       res.sendFile(path.resolve(__dirname, '../client', 'build', 'index.html'));
     });
   }
-            
 
   // Global error handler
   app.use((err, req, res, next) => {

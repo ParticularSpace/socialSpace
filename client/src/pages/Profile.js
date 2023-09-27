@@ -1,21 +1,20 @@
 
-import { Paper, Box, Typography, Avatar, Chip, Stack, Badge, Button} from "@mui/material";
+import { Paper, Box, Typography, Avatar, Chip, Stack, Badge, Button } from "@mui/material";
 
-import './css/HC.css'
-import pro_img from './img/stock_earth.webp';
+
 import CardMedia from '@mui/material/CardMedia';
 
-import PostCard from "./Card";
+
 import { useState, useRef } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
-import{GET_USER_PIC, GET_POSTS } from "../graphql/queries";
+import { GET_USER_PIC, GET_POSTS } from "../graphql/queries";
 import { UPLOAD_AVATAR } from "../graphql/mutations";
 import jwt_decode from "jwt-decode";
 
 
 export function Profile() {
 
-  
+
   const [cardMediaFile, setCardMediaFile] = useState(null);
   const cardMediaFileInputRef = useRef(null);
   const avatarFileInputRef = useRef(null);
@@ -33,8 +32,8 @@ export function Profile() {
     const file = event.target.files[0];
     setAvatarFile(file);
   };
-  
-  
+
+
 
   const handleUploadAvatar = async () => {
     try {
@@ -48,7 +47,7 @@ export function Profile() {
     }
   };
 
-  
+
   const token = localStorage.getItem("id_token");
   const decodedToken = jwt_decode(token);
   const username = decodedToken.data.username;
@@ -69,16 +68,16 @@ export function Profile() {
 
   const posts = data.posts;
   // const posts = data.posts.filter(post => post.user._id === id);
- 
-  
+
+
 
   if (userLoading) return <p>Loading...</p>;
   if (userError) return <p>Error: {userError.message}</p>;
   const user = userData.user;
-  
+
 
   return (
-    <div className="Pro" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center'  }}>
+    <div className="Pro" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
       {/* <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
 
                   <Chip icon={<FavoriteTwoToneIcon/>} style={{marginRight: '20%', color: 'white', }} color='secondary'  label={hi}/>
@@ -97,49 +96,49 @@ export function Profile() {
           width: '100vw',
         }}
       >
-        <Paper elevation={0} sx={{ p: 2, flex:1 }} style={{ position: 'relative', backgroundColor: 'rgba(128, 128, 128, 0.0)', borderRadius: '15px' }}>
-          <div style={{ display: 'flex', flexWrap: 'wrap', flexDirection:'column' ,alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
+        <Paper elevation={0} sx={{ p: 2, flex: 1 }} style={{ position: 'relative', backgroundColor: 'rgba(128, 128, 128, 0.0)', borderRadius: '15px' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
 
-          {/* <input type="file" accept="image/*" onChange={handleCardMediaFileChange} style={{ display: 'none' }} ref={cardMediaFileInputRef} /> */}
-            <CardMedia sx={{ height: '30vh', width: '100%', border: '3px solid white', borderRadius: '15px', cursor: 'pointer'}} image={cardMediaFile ? URL.createObjectURL(cardMediaFile) : pro_img}
+            {/* <input type="file" accept="image/*" onChange={handleCardMediaFileChange} style={{ display: 'none' }} ref={cardMediaFileInputRef} /> */}
+            <CardMedia sx={{ height: '30vh', width: '100%', border: '3px solid white', borderRadius: '15px', cursor: 'pointer' }} image={cardMediaFile ? URL.createObjectURL(cardMediaFile) : null}
               onClick={() => cardMediaFileInputRef.current.click()} />
-            
-            
-            <Avatar sx={{ width: 60, height: 60, position:'absolute', top: '28vh', border: '2px solid white', cursor: 'pointer' }} onClick={() => avatarFileInputRef.current.click()}>  {/*() => avatarFileInputRef.current.click()*/}
-            
-            <input type="file" accept="image/*" onChange={handleAvatarFileChange} style={{ display: 'none' }} ref={avatarFileInputRef} />
-            {user.profile_picture && <img src={user.profile_picture} alt="Profile Avatar" />}
-            {avatarFile && ( 
+
+
+            <Avatar sx={{ width: 60, height: 60, position: 'absolute', top: '28vh', border: '2px solid white', cursor: 'pointer' }} onClick={() => avatarFileInputRef.current.click()}>  {/*() => avatarFileInputRef.current.click()*/}
+
+              <input type="file" accept="image/*" onChange={handleAvatarFileChange} style={{ display: 'none' }} ref={avatarFileInputRef} />
+              {user.profile_picture && <img src={user.profile_picture} alt="Profile Avatar" />}
+              {avatarFile && (
                 <img src={URL.createObjectURL(avatarFile)} alt="Uploaded Avatar" style={{ width: '100%', height: '100%', borderRadius: '50%' }} />
               )}
             </Avatar>
             {avatarFile && (
-              <Button variant={'contained'} onClick={handleUploadAvatar} style={{backgroundColor: "grey", position: 'absolute', top: '40vh'}}>Upload Avatar</Button>
+              <Button variant={'contained'} onClick={handleUploadAvatar} style={{ backgroundColor: "grey", position: 'absolute', top: '40vh' }}>Upload Avatar</Button>
             )}
 
           </div>
-          <div className="secondary" style={{display: 'flex', padding: '2%'}}>
+          <div className="secondary" style={{ display: 'flex', padding: '2%' }}>
 
-          <Typography style={{marginTop: '1%', padding: '1%', backgroundColor: 'rgba(128, 128, 128, 0.6)', borderRadius: '15px',  margin: '3%'}} variant="h6" gutterBottom>
+            <Typography style={{ marginTop: '1%', padding: '1%', backgroundColor: 'rgba(128, 128, 128, 0.6)', borderRadius: '15px', margin: '3%' }} variant="h6" gutterBottom>
               {username}
-          </Typography>
+            </Typography>
 
 
-          
-              
+
+
           </div>
           <div className="userPost">
 
-          {/* {posts.map((post) => (
+            {/* {posts.map((post) => (
             <PostCard key={post._id} post={post} likes={post.likes} />
           ))} */}
-          <div className="userContent" >
+            <div className="userContent" >
 
-          <div className='innerFeed' style={{ position: 'absolute', height: '70%', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', overflow: 'auto' }}>
-                
+              <div className='innerFeed' style={{ position: 'absolute', height: '70%', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', overflow: 'auto' }}>
+
+              </div>
+
             </div>
-
-          </div>
 
           </div>
         </Paper>
