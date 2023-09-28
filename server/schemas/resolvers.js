@@ -7,7 +7,6 @@ const { v4: uuidv4 } = require('uuid');  // for generating unique filenames
 const { GraphQLUpload } = require('graphql-upload');
 const moderateText = require('../utils/ai/moderateText');
 const moderateImage = require('../utils/ai/moderateImage');
-const isItJackieChan = require('../utils/ai/isItJackieChan');
 const generateFeed = require('../algorithms/feed_generator');
 
 // const { createWriteStream } = require('fs');
@@ -238,14 +237,6 @@ const resolvers = {
       if (context.user) {
         const hashtags = extractHashtags(content);
         console.log("hashtags:", hashtags);
-
-        const aboutJackieChan = await isItJackieChan(content);
-        console.log("aboutJackieChan:", aboutJackieChan);
-        if (aboutJackieChan) {
-          console.log("ALARM ALARM");
-          throw new Error(aboutJackieChan);
-          return;
-        }
 
         const moderatedContent = await moderateText(content);
 

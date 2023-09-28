@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
-import { TextField, Button, Box, Card, CardMedia } from '@mui/material';
 import { ADD_POST } from '../graphql/mutations';
-
-
 
 function CreatePost() {
   const [content, setContent] = useState('');
@@ -14,17 +11,12 @@ function CreatePost() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      console.log("photo", photo);
-      console.log("content", content);
-
       const { data } = await addPost({
         variables: {
           content,
           photo,
         },
       });
-
-      console.log(data);
       setContent('');
       setPhoto(null);
       setPreview(null);
@@ -37,97 +29,67 @@ function CreatePost() {
   const handlePhotoChange = (event) => {
     const file = event.target.files[0];
     if (!file) return;
-
     setPhoto(file);
-
     let reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {
       setPreview(reader.result);
-
-      // Send the file to the server for analysis
-      let formData = new FormData();
-      formData.append('image', file);
-
-      fetch('http://localhost:3001/check-image', {
-        method: 'POST',
-        body: formData,
-      })
-        .then(res => res.json())
-        .then(data => {
-          if (data.containsJackieChan) {
-            alert("Jackie Chan detected in image!");
-          } else {
-            alert("No Jackie Chan detected in image.");
-          }
-        })
-        .catch(error => console.error('Error checking image:', error));
     };
   };
 
   return (
-    <div className='Cre'>
-      <Box
-        className='cratecase'
-        sx={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          borderRadius: '15px',
-          padding: '2%',
-          margin: '1%',
-          height: '80vh',
-          width: '100vw',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: 'rgba(220, 220, 220, 0.5)',
-          '& > :not(style)': {
-            m: 4,
-            height: 400,
-            p: '2%',
-          },
-        }}>
-        <form onSubmit={handleSubmit}>
+    <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-center">
+      <div className="max-w-md w-full p-4 bg-white rounded-lg shadow-md">
+        <h1 className="text-3xl font-semibold mb-4 text-center">Create a New Post</h1>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="relative rounded-md shadow-sm">
+            <textarea
+              className="w-full p-2 rounded-md border border-gray-300"
+              placeholder="What's on your mind?"
+              rows={4}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+            ></textarea>
+          </div>
+
           {preview && (
-            <Card sx={{ maxWidth: 345, marginBottom: 1 }}>
-              <CardMedia
-                sx={{ height: '30vh', width: '40vw' }}
-                component="img"
-                height="140"
-                image={preview}
+            <div className="flex justify-center">
+              <img
+                className="h-32 w-32 object-cover rounded-lg"
+                src={preview}
                 alt="Preview"
               />
-            </Card>
+            </div>
           )}
 
-          <TextField
+          <div className="flex justify-between items-center">
+            <label className="cursor-pointer">
+              <input
+                type="file"
+                className="hidden"
+                accept="image/*"
+                onChange={handlePhotoChange}
+              />
+              <div className="flex items-center text-blue-500">
+                <span className="ml-1">Add Photo</span>
+              </div>
+            </label>
 
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            label="Post Content"
-            variant="outlined"
-            fullWidth
-            multiline
-            rows={4}
-            margin="normal"
-          />
-          <label htmlFor="upload-photo">
-            <input
-              accept="image/*"
-              id="upload-photo"
-              type="file"
-              hidden
-              onChange={handlePhotoChange}
-            />
-            <Button variant="contained" component="span" style={{ marginTop: '1rem', marginRight: '1rem', backgroundColor: 'grey' }}>
-              Choose Photo
-            </Button>
-          </label>
-          <Button type="submit" variant="contained" style={{ marginTop: '1rem', backgroundColor: 'grey' }}>
-            Create Post
-          </Button>
-          {error && <p>Error creating post: {error.message}</p>}
+            <button
+              type="submit"
+              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+            >
+              Post
+            </button>
+          </div>
+
+          {error && (
+            <div className="text-center text-red-600">
+              {`Error: ${error.message}`}
+            </div>
+          )}
         </form>
-      </Box>
+      </div>
     </div>
   );
 }
