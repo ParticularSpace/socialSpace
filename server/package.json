@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "build": "echo 'Server does not need building'"
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
