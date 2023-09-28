@@ -5,16 +5,15 @@
       "install": "npm run install:server && npm run install:client",
       "install:server": "cd server && npm install",
       "install:client": "cd client && npm install",
+      "start": "cd server && npm start",
+      "heroku-postbuild": "npm run install && npm run build",
       "build": "npm run build:server && npm run build:client",
       "build:server": "cd server && npm run build",
-      "build:client": "cd client && npm run build",
-      "start": "cd server && npm start",
-      "heroku-postbuild": "npm run build"
+      "build:client": "cd client && npm run build"
     },
     "engines": {
-        "node": "16.13.0",
-        "npm": "8.1.0"
-      }
-      
+      "node": "16.13.0",
+      "npm": "8.1.0"
+    }
   }
   

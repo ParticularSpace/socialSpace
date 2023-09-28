@@ -1,11 +1,10 @@
 {
   "name": "socialnetwork-server",
   "version": "1.0.0",
-  "description": "",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "heroku-postbuild": "cd ../client && npm install --legacy-peer-deps && npm run build"
+    "build": "echo 'Server does not need building'"
   },
   "keywords": [],
   "author": "",
