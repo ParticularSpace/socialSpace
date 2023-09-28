@@ -1,0 +1,19 @@
+{
+    "name": "social-space",
+    "version": "1.0.0",
+    "scripts": {
+      "install": "npm run install:server && npm run install:client",
+      "install:server": "cd server && npm install",
+      "install:client": "cd client && npm install",
+      "build": "npm run build:server && npm run build:client",
+      "build:server": "cd server && npm run build",
+      "build:client": "cd client && npm run build",
+      "start": "cd server && npm start",
+      "heroku-postbuild": "npm run build"
+    },
+    "engines": {
+      "node": "your_node_version",
+      "npm": "your_npm_version"
+    }
+  }
+  
