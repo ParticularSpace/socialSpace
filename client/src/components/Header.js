@@ -22,12 +22,12 @@ const Header = () => {
           <>
             <div className="text-gray-600" title="Login">
               <Link to="/login" className="text-xl">
-                🛂
+                Login
               </Link>
             </div>
             <div className="text-gray-600" title="Register">
               <Link to="/register" className="text-xl">
-                🆕
+                Register
               </Link>
             </div>
           </>
