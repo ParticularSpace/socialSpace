@@ -260,7 +260,14 @@ export default function PostCard({ post }) {
 
 
   return (
-    <div className="relative bg-gray-200 rounded-lg w-96 h-auto border border-gray-300 m-4">
+    <div className="relative bg-gray-200 rounded-lg w-96 h-auto border-2 border-gray-400 m-4">
+      {/* Profile Header Section */}
+      <div className="bg-white p-2 flex rounded-lg items-center">
+        <img className="w-10 h-10 rounded-full" alt={post.username} src={post.avatar} />
+        <p className="ml-2 text-sm text-gray-700">{post.username}</p>
+      </div>
+  
+      {/* Post Image */}
       {post.photo && (
         <img
           className="h-60 w-full object-cover"
@@ -268,20 +275,22 @@ export default function PostCard({ post }) {
           alt="Post"
         />
       )}
-      <div className="absolute top-2 left-2 z-10">
-        <img className="w-10 h-10 rounded-full" alt={post.username} src={post.avatar} />
-      </div>
+  
+      {/* Post Content */}
       <div className="p-4">
-        <p className="text-xs text-gray-600 mb-2">{post.username}</p>
         <p className="text-sm text-gray-700">
           {renderContentWithHashtags(post.content)}
         </p>
         {/* Caption Section */}
         {post.caption && <p className="text-sm text-gray-500">{post.caption}</p>}
       </div>
+  
       {/* Timestamp Section */}
       <p className="text-xs text-gray-400 px-4">
-        {new Date(post.createdAt).toString() !== 'Invalid Date' ? formatDistanceToNow(new Date(post.createdAt)) + ' ago' : 'Invalid Date'}
+        {new Date(post.createdAt).toString() !== 'Invalid Date' 
+          ? formatDistanceToNow(new Date(post.createdAt)) + ' ago' 
+          : 'Invalid Date'
+        }
       </p>
 
     

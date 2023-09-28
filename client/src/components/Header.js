@@ -1,5 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import React from 'react';
+import App from '../App';
+
 
 const Header = () => {
 
@@ -13,8 +15,9 @@ const Header = () => {
   const location = useLocation();
 
   return (
-    <div className="fixed inset-x-0 top-0 md:bottom-0 z-10 bg-white shadow-md md:top-auto">
+    <div className={`fixed inset-x-0 z-10 bg-white shadow-md md:order-first order-last ${isAuthenticated ? 'md:top-0 md:bottom-auto bottom-0' : 'top-0 md:bottom-auto'}`}>
       <div className="max-w-screen-lg mx-auto flex justify-between items-center px-4 py-2">
+  
         {!isAuthenticated && (
           <>
             <div className="text-gray-600" title="Login">
@@ -51,6 +54,8 @@ const Header = () => {
       </div>
     </div>
   );
+  
+  
 };
 
 export default Header;

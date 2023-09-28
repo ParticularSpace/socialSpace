@@ -148,11 +148,6 @@ const resolvers = {
       }
 
 
-      // const { createReadStream, filename } = await avatar;
-      // const fileStream = createReadStream();
-      // const uniqueFilename = uuidv4() + '-' + filename; // Generate a unique name
-
-
     },
 
 
@@ -236,16 +231,6 @@ const resolvers = {
     },
 
 
-
-
-
-
-
-
-
-
-
-
     addPost: async (_, { content, photo }, context) => {
       console.log("addPost resolver");
 
@@ -320,34 +305,6 @@ const resolvers = {
       }
 
     },
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-    // checkImage: async (_, { file }) => {
-    //   const { createReadStream } = await file;
-    //   const chunks = [];
-    //   for await (let chunk of createReadStream()) {
-    //     chunks.push(chunk);
-    //   }
-    //   const buffer = Buffer.concat(chunks);
-    //   return await checkForJackieChan(buffer);
-
-    // },
-
-
-
-
 
     likePost: async (_, { postId }, context) => {
       if (!context.user) {
