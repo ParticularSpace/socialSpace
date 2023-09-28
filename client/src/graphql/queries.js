@@ -91,6 +91,7 @@ export const GET_PERSONALIZED_POSTS = gql`
       user {
         _id
         username
+        profile_picture
       }
       likes {
         _id

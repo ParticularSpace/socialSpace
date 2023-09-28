@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import placeholder from "./img/in_img.png";
 
+
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_ME } from "../graphql/queries";
 import {
@@ -19,6 +20,7 @@ export default function PostCard({ post }) {
   const [unlikePost] = useMutation(UNLIKE_POST);
   const [addComment] = useMutation(ADD_COMMENT);
   const [deleteComment] = useMutation(DELETE_COMMENT);
+
 
   const [commentContent, setCommentContent] = React.useState("");
   const [showComments, setShowComments] = React.useState(false);
@@ -258,15 +260,18 @@ export default function PostCard({ post }) {
     }
   };
 
+  console.log("Post object:", post);
 
   return (
     <div className="relative bg-gray-200 rounded-lg w-96 h-auto border-2 border-gray-400 m-4">
       {/* Profile Header Section */}
       <div className="bg-white p-2 flex rounded-lg items-center">
-        <img className="w-10 h-10 rounded-full" alt={post.username} src={post.avatar} />
-        <p className="ml-2 text-sm text-gray-700">{post.username}</p>
-      </div>
-  
+    <img className="w-10 h-10 rounded-full" alt={post.user.username} src={post.user.profile_picture} />
+    <div className="ml-2 flex flex-col">
+      <h1 className="text-gray-700 text-sm font-semibold">{post.user.username}</h1>
+    </div>
+  </div>
+
       {/* Post Image */}
       {post.photo && (
         <img
@@ -275,7 +280,7 @@ export default function PostCard({ post }) {
           alt="Post"
         />
       )}
-  
+
       {/* Post Content */}
       <div className="p-4">
         <p className="text-sm text-gray-700">
@@ -284,16 +289,16 @@ export default function PostCard({ post }) {
         {/* Caption Section */}
         {post.caption && <p className="text-sm text-gray-500">{post.caption}</p>}
       </div>
-  
+
       {/* Timestamp Section */}
       <p className="text-xs text-gray-400 px-4">
-        {new Date(post.createdAt).toString() !== 'Invalid Date' 
-          ? formatDistanceToNow(new Date(post.createdAt)) + ' ago' 
+        {new Date(post.createdAt).toString() !== 'Invalid Date'
+          ? formatDistanceToNow(new Date(post.createdAt)) + ' ago'
           : 'Invalid Date'
         }
       </p>
 
-    
+
       <div className="flex flex-col items-center justify-center p-4">
         <div className="flex items-center w-full justify-between">
           {/* Heart and Like Counter */}
@@ -308,13 +313,13 @@ export default function PostCard({ post }) {
           </div>
           {/* Rest of the Buttons */}
           <div className="flex items-center space-x-2">
-          <button
-            className="w-8 h-8 rounded-full text-white"
-            onClick={() => setShowComments(!showComments)}
-          >
-            💬
-          </button>
-          <p className="text-sm text-gray-600">{post.comments.length}</p>
+            <button
+              className="w-8 h-8 rounded-full text-white"
+              onClick={() => setShowComments(!showComments)}
+            >
+              💬
+            </button>
+            <p className="text-sm text-gray-600">{post.comments.length}</p>
           </div>
           <button className="w-8 h-8 rounded-full text-white">
             🔄
@@ -327,35 +332,40 @@ export default function PostCard({ post }) {
       </div>
 
       {showComments && (
-        <div className="w-full h-[50%] overflow-y-auto border-b border-white">
-          {[...post.comments].reverse().map((comment, idx, arr) => (
-            <div
-              key={comment._id}
-              className="p-2"
-              ref={idx === 0 ? commentsEndRef : null}
+  <div className="w-full h-[50%] overflow-y-auto border-t border-gray-300">
+    <div className="p-2" ref={commentsTopRef}>
+      {post.comments.map((comment, idx) => (
+        <div
+          key={comment._id}
+          className="p-2 border-b border-gray-200 relative" // Add 'relative' for positioning
+          ref={idx === 0 ? commentsEndRef : null}
+          id={comment._id}
+        >
+          {/* Delete button - moved outside flex */}
+          {(currentUser._id === comment.user._id || currentUser._id === post.user._id) && (
+            <button
+              className="absolute top-0 right-0 text-xs text-red-500"
+              onClick={() => handleDeleteComment(post._id, comment._id)}
             >
-              <div className="flex justify-between items-center">
-                <div>
-                  <strong>{comment.user.username}:</strong>{" "}
-                  {comment.content}
-                </div>
-                {(currentUser._id === comment.user._id ||
-                  currentUser._id === post.user._id) && (
-                    <button
-                      className="text-xs text-red-500"
-                      onClick={() => handleDeleteComment(post._id, comment._id)}
-                    >
-                      Delete
-                    </button>
-                  )}
-              </div>
-              <p className="text-xs text-gray-500 mt-1">
-                {/* Replace this with the time ago logic */}
-                {/* {formatDistanceToNow(new Date(comment.createdAt))} ago */}
-              </p>
+              🗑️
+            </button>
+          )}
+          <div className="flex justify-between items-center">
+            <div>
+              <strong className="text-sm text-gray-700">{comment.user.username}</strong>
+              <p className="text-xs text-gray-600">{comment.content}</p>
             </div>
-          ))}
-          <div className="pt-2">
+            <p className="text-xs text-gray-400">
+              {new Date(comment.createdAt).toString() !== 'Invalid Date'
+                ? formatDistanceToNow(new Date(comment.createdAt)) + ' ago'
+                : 'Invalid Date'
+              }
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+          <div className="pt-2 px-2">
             <input
               className="w-full p-2 rounded border"
               value={commentContent}
@@ -363,7 +373,7 @@ export default function PostCard({ post }) {
               placeholder="Add a comment"
             />
             <button
-              className="mt-2 bg-blue-500 text-white py-1 px-2 rounded"
+              className="mt-2 w-full bg-blue-500 text-white py-1 px-2 rounded"
               onClick={() => handleCommentSubmit(post._id)}
             >
               Post Comment
@@ -372,6 +382,5 @@ export default function PostCard({ post }) {
         </div>
       )}
     </div>
-  
   );
 }
