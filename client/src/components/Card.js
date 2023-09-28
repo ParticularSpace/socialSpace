@@ -1,18 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import IconButton from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import FavoriteBorderTwoToneIcon from "@mui/icons-material/FavoriteBorderTwoTone";
-import TextField from "@mui/material/TextField";
-import DeleteIcon from "@mui/icons-material/Delete";
-import Button from "@mui/material/Button";
-import Avatar from "@mui/material/Avatar";
-import CardMedia from "@mui/material/CardMedia";
-import ShareTwoToneIcon from "@mui/icons-material/ShareTwoTone";
+import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import placeholder from "./img/in_img.png";
-import ChatBubbleTwoToneIcon from "@mui/icons-material/ChatBubbleTwoTone";
+
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_ME } from "../graphql/queries";
 import {
@@ -270,196 +259,110 @@ export default function PostCard({ post }) {
   };
 
 
-
-
-
-
-
-
-  const dynamicHeight = showComments
-    ? post.photo
-      ? "93vh" // comments and a photo
-      : "66vh" // comments but no photo
-    : post.photo
-      ? "53vh" // no comments but there is a photo
-      : "23vh"; // no comments and no photo
-
   return (
-    <div className="Car">
-      <Card
-        color="dark"
-        style={{
-          position: "relative",
-          backgroundColor: "rgba(128, 128, 128, 0.6)",
-          borderRadius: "15px",
-          height: dynamicHeight,
-          width: "30vw",
-        }}
-      >
-        {post.photo && (
-          <CardMedia
-            sx={{ height: "30vh", width: "30vw" }}
-            image={post.photo ? post.photo : placeholder}
-          />
-        )}
-        <a
-          href="#"
-          style={{ position: "absolute", top: "2%", left: "2%", zIndex: 1 }}
-        >
-          <Avatar alt={post.username} />
-        </a>
+    <div className="relative bg-gray-200 rounded-lg w-96 h-auto border border-gray-300 m-4">
+      {post.photo && (
+        <img
+          className="h-60 w-full object-cover"
+          src={post.photo ? post.photo : placeholder}
+          alt="Post"
+        />
+      )}
+      <div className="absolute top-2 left-2 z-10">
+        <img className="w-10 h-10 rounded-full" alt={post.username} src={post.avatar} />
+      </div>
+      <div className="p-4">
+        <p className="text-xs text-gray-600 mb-2">{post.username}</p>
+        <p className="text-sm text-gray-700">
+          {renderContentWithHashtags(post.content)}
+        </p>
+        {/* Caption Section */}
+        {post.caption && <p className="text-sm text-gray-500">{post.caption}</p>}
+      </div>
+      {/* Timestamp Section */}
+      <p className="text-xs text-gray-400 px-4">
+        {new Date(post.createdAt).toString() !== 'Invalid Date' ? formatDistanceToNow(new Date(post.createdAt)) + ' ago' : 'Invalid Date'}
+      </p>
 
-        <CardContent>
-          {/* <div className='Tagz'>
-            
-            <span style={{ cursor: 'pointer', color: 'white' }}>
-              #tag1 #tag2 #tag3
-            </span>
-          </div> */}
-
-          <div className="Desc">
-            <Typography
-              sx={{ fontSize: 14 }}
-              color="text.secondary"
-              gutterBottom
+    
+      <div className="flex flex-col items-center justify-center p-4">
+        <div className="flex items-center w-full justify-between">
+          {/* Heart and Like Counter */}
+          <div className="flex items-center space-x-2">
+            <button
+              className={`w-8 h-8 rounded-full ${isLikedByUser ? 'text-red-600' : 'text-gray-400'}`}
+              onClick={isLikedByUser ? () => handleUnlike(post._id) : () => handleLike(post._id)}
             >
-              {post.username}
-            </Typography>
-
-            <Typography variant="body2" color="text.secondary">
-              {renderContentWithHashtags(post.content)}
-            </Typography>
-
-            {/* <IconButton style={{ color: 'blue', borderRadius: '50%' }}>
-              <ReadMoreTwoToneIcon />
-            </IconButton> */}
+              {isLikedByUser ? '❤️' : '🤍'}
+            </button>
+            <p className="text-sm text-gray-600">{likesArray.length}</p>
           </div>
-        </CardContent>
-
-        <CardActions
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              width: "100%",
-              justifyContent: "space-around",
-            }}
+          {/* Rest of the Buttons */}
+          <div className="flex items-center space-x-2">
+          <button
+            className="w-8 h-8 rounded-full text-white"
+            onClick={() => setShowComments(!showComments)}
           >
-            <IconButton
-              aria-label="like"
-              size="small"
-              style={{
-                borderRadius: "50%",
-                color: isLikedByUser ? "red" : "white",
-              }}
-              onClick={
-                isLikedByUser
-                  ? () => handleUnlike(post._id)
-                  : () => handleLike(post._id)
-              }
-            >
-              <FavoriteBorderTwoToneIcon />
-            </IconButton>
-            <Typography variant="body2" color="text.secondary">
-              {likesArray.length}
-            </Typography>
-            <IconButton
-              aria-label="comment"
-              size="small"
-              style={{ borderRadius: "50%", color: "white" }}
-              onClick={() => setShowComments(!showComments)} // Toggle the comment section
-            >
-              <ChatBubbleTwoToneIcon />
-            </IconButton>
-            <IconButton
-              aria-label="share"
-              size="small"
-              style={{ borderRadius: "50%", color: "white" }}
-            >
-              <ShareTwoToneIcon />
-            </IconButton>
+            💬
+          </button>
+          <p className="text-sm text-gray-600">{post.comments.length}</p>
           </div>
-          {showComments && (
-            <div style={{ width: "100%", height: "50%" }} ref={commentsTopRef}>
-              <div
-                style={{
-                  maxHeight: "180px",
-                  maxWidth: "100vw",
-                  overflowY: "scroll",
-                  borderBottom: "1px solid white",
-                }}
-              >
-                {/* Dynamically render each comment from the post object in reverse order */}
-                {[...post.comments].reverse().map((comment, idx, arr) => (
-                  <div
-                    key={comment._id}
-                    style={{ padding: "10px" }}
-                    ref={idx === 0 ? commentsEndRef : null} // Add ref to the last comment (which is the first in the reversed array)
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                      }}
-                    >
-                      <div>
-                        <strong>{comment.user.username}:</strong>{" "}
-                        {comment.content}
-                      </div>
-                      {(currentUser._id === comment.user._id ||
-                        currentUser._id === post.user._id) && (
-                          <IconButton
-                            onClick={() =>
-                              handleDeleteComment(post._id, comment._id)
-                            }
-                            size="small"
-                          >
-                            <DeleteIcon fontSize="small" />
-                          </IconButton>
-                        )}
-                    </div>
+          <button className="w-8 h-8 rounded-full text-white">
+            🔄
+          </button>
+          {/* Save Post Button */}
+          <button className="w-8 h-8 rounded-full text-white">
+            💾
+          </button>
+        </div>
+      </div>
 
-                    <Typography
-                      variant="caption"
-                      color="text.secondary"
-                      display="block"
-                      style={{ marginTop: "5px", width: "100vw" }}
+      {showComments && (
+        <div className="w-full h-[50%] overflow-y-auto border-b border-white">
+          {[...post.comments].reverse().map((comment, idx, arr) => (
+            <div
+              key={comment._id}
+              className="p-2"
+              ref={idx === 0 ? commentsEndRef : null}
+            >
+              <div className="flex justify-between items-center">
+                <div>
+                  <strong>{comment.user.username}:</strong>{" "}
+                  {comment.content}
+                </div>
+                {(currentUser._id === comment.user._id ||
+                  currentUser._id === post.user._id) && (
+                    <button
+                      className="text-xs text-red-500"
+                      onClick={() => handleDeleteComment(post._id, comment._id)}
                     >
-                      {/* Uncomment the following line when you've resolved the date format issue */}
-                      {/* {formatDistanceToNow(new Date(comment.createdAt))} ago */}
-                    </Typography>
-                  </div>
-                ))}
+                      Delete
+                    </button>
+                  )}
               </div>
-
-              {/* Comment input and button section */}
-              <div style={{ paddingTop: "10px" }}>
-                <TextField
-                  value={commentContent}
-                  onChange={(e) => setCommentContent(e.target.value)}
-                  label="Add a comment"
-                  fullWidth
-                />
-                <Button
-                  onClick={() => handleCommentSubmit(post._id)}
-                  color="primary"
-                  style={{ marginTop: "5px" }}
-                >
-                  Post Comment
-                </Button>
-              </div>
+              <p className="text-xs text-gray-500 mt-1">
+                {/* Replace this with the time ago logic */}
+                {/* {formatDistanceToNow(new Date(comment.createdAt))} ago */}
+              </p>
             </div>
-          )}
-        </CardActions>
-      </Card>
+          ))}
+          <div className="pt-2">
+            <input
+              className="w-full p-2 rounded border"
+              value={commentContent}
+              onChange={(e) => setCommentContent(e.target.value)}
+              placeholder="Add a comment"
+            />
+            <button
+              className="mt-2 bg-blue-500 text-white py-1 px-2 rounded"
+              onClick={() => handleCommentSubmit(post._id)}
+            >
+              Post Comment
+            </button>
+          </div>
+        </div>
+      )}
     </div>
+  
   );
 }

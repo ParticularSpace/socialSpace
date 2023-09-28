@@ -1,94 +1,56 @@
 import { Link, useLocation } from 'react-router-dom';
-import IconButton from '@mui/material/IconButton';
-import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
-import SettingsTwoToneIcon from '@mui/icons-material/SettingsTwoTone';
-import AccountCircleTwoToneIcon from '@mui/icons-material/AccountCircleTwoTone';
-import LoginTwoToneIcon from '@mui/icons-material/LoginTwoTone';
-import HowToRegTwoToneIcon from '@mui/icons-material/HowToRegTwoTone';
-import LogoutIcon from '@mui/icons-material/Logout';
-import Tooltip from '@mui/material/Tooltip';
-import React, { useState } from 'react';
-
-
-
-
+import React from 'react';
 
 const Header = () => {
 
-  //logout function
+  // Logout function
   const logout = () => {
     localStorage.removeItem('id_token');
     window.location.replace('/');
   };
 
-  const [transition, setTransition] = useState(false);
-
-  const handleClick = () => {
-    setTransition(!transition);
-  };
-
   const isAuthenticated = localStorage.getItem('id_token');
-
   const location = useLocation();
 
-  const showLoginRegisterButtons = !isAuthenticated && (location.pathname === '/login' || location.pathname === '/register');
-
-
   return (
-
-    <div className='Bar' >
-
-      <div className='NavCont' style={{ backgroundColor: 'rgba(128, 128, 128, 0.8)', borderRadius: '15px' }}>
-
+    <div className="fixed inset-x-0 top-0 md:bottom-0 z-10 bg-white shadow-md md:top-auto">
+      <div className="max-w-screen-lg mx-auto flex justify-between items-center px-4 py-2">
         {!isAuthenticated && (
           <>
-            <Tooltip title='Login'>
-              <IconButton color="inherit" component={Link} to="/login">
-                <LoginTwoToneIcon />
-              </IconButton>
-            </Tooltip>
-
-            <Tooltip title='Register'>
-              <IconButton color="inherit" component={Link} to="/register">
-                <HowToRegTwoToneIcon />
-              </IconButton>
-            </Tooltip>
+            <div className="text-gray-600" title="Login">
+              <Link to="/login" className="text-xl">
+                🛂
+              </Link>
+            </div>
+            <div className="text-gray-600" title="Register">
+              <Link to="/register" className="text-xl">
+                🆕
+              </Link>
+            </div>
           </>
         )}
         {isAuthenticated && (
           <>
-            <Tooltip title='Home'>
-              <IconButton color="inherit" component={Link} to="/home">
-                <HomeTwoToneIcon />
-              </IconButton>
-            </Tooltip>
-            {/* <Tooltip title='Setting'>
-              <IconButton color="inherit" component={Link} to="/settings">
-                <SettingsTwoToneIcon />
-              </IconButton>
-            </Tooltip> */}
-
-
-            <Tooltip title='Profile'>
-              <IconButton color="inherit" component={Link} to="/profile"><AccountCircleTwoToneIcon /></IconButton>
-            </Tooltip>
-
-            <Tooltip title='Logout'>
-              <IconButton color="inherit" onClick={logout}>
-                <LogoutIcon />
-              </IconButton>
-            </Tooltip>
-
-
-
+            <div className="text-gray-600" title="Home">
+              <Link to="/home" className="text-xl">
+                Home
+              </Link>
+            </div>
+            <div className="text-gray-600" title="Profile">
+              <Link to="/profile" className="text-xl">
+                Profile
+              </Link>
+            </div>
+            <div className="text-gray-600" title="Logout">
+              <button onClick={logout} className="text-xl">
+                Logout
+              </button>
+            </div>
           </>
         )}
       </div>
-
     </div>
-
   );
 };
 
 export default Header;
-
