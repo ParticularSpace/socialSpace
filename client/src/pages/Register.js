@@ -1,86 +1,96 @@
-import { Box, Button } from "@mui/material";
-import TextField from '@mui/material/TextField';
-import DoneIcon from '@mui/icons-material/Done';
 import { useMutation } from '@apollo/client';
-import { ADD_USER } from '../graphql/mutations';
 import { useState } from 'react';
-
+import { ADD_USER } from '../graphql/mutations';
 
 export function Register() {
-    const [addUser] = useMutation(ADD_USER);
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
-    const [dateOfBirth, setDateOfBirth] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-   
+  const [addUser] = useMutation(ADD_USER);
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        
-        // check that all fields are filled out
-        if (!username || !email || !dateOfBirth || !password || !confirmPassword) {
-            console.error("All fields must be filled out");
-            return;
-        }
-    
-        // check that passwords match
-        if (password !== confirmPassword) {
-            console.error("Passwords do not match");
-            return;
-        }
-      
-        try {
-            const { data } = await addUser({
-                variables: { username, email, date_of_birth: dateOfBirth, password },
-            });
-    
-            // Storing the token in localStorage upon successful registration
-            const token = data.addUser.token;
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-            if (token) {
-                localStorage.setItem('id_token', token);
-                window.location.replace("/home");
-            } else {
-                console.error("Registration successful but no token received");
-            }
-        } catch (err) {
-            // Handle error (e.g. show error message)
-            console.error(err);
-        }
-    };
+    if (!username || !email || !dateOfBirth || !password || !confirmPassword) {
+      console.error("All fields must be filled out");
+      return;
+    }
 
-    
-    return (
-        <div className="Reg">
-            <Box 
-            sx={{
-                width: 300,
-                height: 500,
-                margin: '2%',
-                paddingTop: '2%',
-                borderRadius: '15px',
-                backgroundColor: 'rgba(128, 128, 128, 0.6)',
-            }}
-            >
-                <h1 style={{fontWeight: 'bolder', fontSize: '20px', paddingBottom: '5%'}}>Register</h1>
-                
-                <form onSubmit={handleSubmit}>
-                    <div className="regTxt">
-                    <TextField id="filled-basic" label="Username" variant="filled" value={username} onChange={(e) => setUsername(e.target.value)} />
-                    <TextField id="filled-basic" label="Email" variant="filled" value={email} onChange={(e) => setEmail(e.target.value)} />
-                    
-                    <TextField id="filled-basic" label="Password" variant="filled" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                    <TextField id="filled-basic" label="Confirm Password" variant="filled" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
-                    <TextField id="filled-basic" label="Date of Birth" variant="filled" type="date" InputLabelProps={{ shrink: true }} value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)} />
-                   </div> 
-                   <Button style={{color:'white', marginTop: '10%'}} variant="contained" endIcon={<DoneIcon/>} color="success" type="submit">Submit</Button>
-                </form>
-                
-               
-            </Box>
-        </div>
-    );
+    if (password !== confirmPassword) {
+      console.error("Passwords do not match");
+      return;
+    }
+
+    try {
+      const { data } = await addUser({
+        variables: { username, email, date_of_birth: dateOfBirth, password },
+      });
+
+      const token = data.addUser.token;
+
+      if (token) {
+        localStorage.setItem('id_token', token);
+        window.location.replace("/home");
+      } else {
+        console.error("Registration successful but no token received");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  return (
+    <div className="flex items-center justify-center h-screen bg-[url('path/to/your/star-background.jpg')]">
+      <div className="bg-gray-700 p-8 rounded-lg w-80">
+        <h1 className="text-white text-2xl font-semibold mb-4">Register</h1>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input 
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="w-full p-2 rounded border border-gray-300"
+          />
+          <input 
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full p-2 rounded border border-gray-300"
+          />
+          <input 
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full p-2 rounded border border-gray-300"
+          />
+          <input 
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            className="w-full p-2 rounded border border-gray-300"
+          />
+          <input 
+            type="date"
+            placeholder="Date of Birth"
+            value={dateOfBirth}
+            onChange={(e) => setDateOfBirth(e.target.value)}
+            className="w-full p-2 rounded border border-gray-300"
+          />
+          <button 
+            type="submit" 
+            className="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50"
+          >
+            Submit
+          </button>
+        </form>
+      </div>
+    </div>
+  );
 }
 
 export default Register;
