@@ -30,7 +30,7 @@ const Header = () => {
                 Register
               </Link>
             </div>
-          </>
+          </>  
         )}
         {isAuthenticated && (
           <>
