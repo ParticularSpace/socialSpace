@@ -12,8 +12,9 @@
       "heroku-postbuild": "npm run build"
     },
     "engines": {
-      "node": "your_node_version",
-      "npm": "your_npm_version"
-    }
+        "node": "16.13.0",
+        "npm": "8.1.0"
+      }
+      
   }
   
