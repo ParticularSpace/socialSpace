@@ -34,7 +34,7 @@ export function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-[url('path/to/your/star-background.jpg')">
+    <div className="flex items-center justify-center mt-32">
       <div className="bg-gray-700 p-8 rounded-lg w-80">
         <h1 className="text-white text-2xl font-semibold mb-4">Login</h1>
         <form onSubmit={handleFormSubmit} className="space-y-4">
