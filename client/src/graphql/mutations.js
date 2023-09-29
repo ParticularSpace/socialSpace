@@ -127,8 +127,8 @@ export const UPLOAD_AVATAR = gql`
 `;
 
 export const UPDATE_PROFILE = gql`
-  mutation updateProfile($username: String, $email: String, $date_of_birth: String, $profile_picture: Upload) {
-    updateProfile(username: $username, email: $email, date_of_birth: $date_of_birth, profile_picture: $profile_picture) {
+  mutation updateProfile($username: String, $email: String, $profile_picture: Upload) {
+    updateProfile(username: $username, email: $email, profile_picture: $profile_picture) {
       _id
       username
       email

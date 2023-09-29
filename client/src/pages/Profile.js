@@ -1,37 +1,13 @@
-import { useState, useRef, useEffect } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import { useState, useEffect } from 'react'; // Removed useRef
+import { useQuery } from '@apollo/client';
 import { GET_USER_PIC, GET_USER_POSTS } from "../graphql/queries";
-import { UPLOAD_AVATAR } from "../graphql/mutations";
 import jwt_decode from "jwt-decode";
 import Header from '../components/Header';
 import { useNavigate } from 'react-router-dom';
 
-
 export function Profile() {
-  const [avatarFile, setAvatarFile] = useState(null);
-  const avatarFileInputRef = useRef(null);
   const navigate = useNavigate();
   const [userBio, setUserBio] = useState('');
-  const [uploadAvatar] = useMutation(UPLOAD_AVATAR);
-
-  const handleAvatarFileChange = (event) => {
-    const file = event.target.files[0];
-    setAvatarFile(file);
-  };
-
-  const handleUploadAvatar = async () => {
-    try {
-      if (avatarFile) {
-        await uploadAvatar({ variables: { avatar: avatarFile } });
-        alert('Avatar uploaded successfully!');
-      }
-    } catch (error) {
-      console.error('Error uploading avatar:', error);
-      alert('Error uploading avatar.');
-    }
-  };
-
-
 
   const token = localStorage.getItem("id_token");
   const decodedToken = jwt_decode(token);
@@ -39,28 +15,20 @@ export function Profile() {
   const _id = decodedToken.data._id;
 
   const { loading, error, data } = useQuery(GET_USER_POSTS, { variables: { userId: _id } });
-
   const { loading: userLoading, error: userError, data: userData } = useQuery(GET_USER_PIC, { variables: { username } });
 
-
-  // Moved useEffect up here
   useEffect(() => {
     if (userData && userData.user && userData.user.bio) {
       setUserBio(userData.user.bio);
     }
   }, [userData]);
 
-
-
   if (loading || userLoading) return <p>Loading...</p>;
   if (error || userError) return <p>Error: {error?.message || userError?.message}</p>;
 
   const user = userData.user;
 
-  console.log(user);
-
   const userPosts = data.getUserPosts;
-  console.log(userPosts);
 
   return (
     <div className="container mx-auto px-4 md:pt-16 pt-4">
@@ -76,13 +44,8 @@ export function Profile() {
       <div className="flex items-center mt-0">
         <div className="w-1/4 ml-4">
           <div className={`relative mx-auto rounded-full hover:shadow-lg cursor-pointer w-20 h-20 md:w-32 md:h-32`}>
-            <input type="file" accept="image/*" onChange={handleAvatarFileChange} className="hidden" ref={avatarFileInputRef} />
             {user.profile_picture && <img src={user.profile_picture} alt="Profile Avatar" className="w-full h-full rounded-full object-cover" />}
-            {avatarFile && <img src={URL.createObjectURL(avatarFile)} alt="Uploaded Avatar" className="w-full h-full rounded-full object-cover" />}
           </div>
-          {avatarFile && (
-            <button className="block mx-auto mt-2 bg-blue-500 text-white rounded p-1" onClick={handleUploadAvatar}>Upload Avatar</button>
-          )}
         </div>
 
         <div className="w-3/4 md:ml-6 ml-4">

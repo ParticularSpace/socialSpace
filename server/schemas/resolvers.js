@@ -552,44 +552,38 @@ const resolvers = {
       if (!user) {
         throw new AuthenticationError('You need to be logged in!');
       }
-
+    
       if (!avatar) {
         throw new Error('Please provide an image file.');
       }
-
+    
       const avatarDetails = await avatar;
       const fileStream = avatarDetails.createReadStream();
       const uniqueFilename = uuidv4() + '-' + avatarDetails.filename;
-
+    
       try {
         const avatarUrl = await uploadToS3(fileStream, uniqueFilename);
         console.log("Uploaded avatar URL:", avatarUrl);
-
-        try {
-          console.log("Updating user:", user);
-          const updatedUser = await User.findByIdAndUpdate(
-            { _id: user.user._id.toString() },
-            { profile_picture: avatarUrl },
-            { new: true } // Get the updated document
-          );
-
-          if (!updatedUser) {
-            throw new Error("User not found or update failed.");
-          }
-
-          console.log("Updated user:", updatedUser);
-
-          return true;
-        } catch (dbError) {
-          console.error('Error updating database:', dbError);
-          throw new Error('Error updating avatar in the database.');
+    
+        const updatedUser = await User.findByIdAndUpdate(
+          { _id: user.user._id.toString() },
+          { profile_picture: avatarUrl },
+          { new: true }
+        );
+    
+        if (!updatedUser) {
+          throw new Error("User not found or update failed.");
         }
-
-      } catch (uploadError) {
-        console.error('Error uploading avatar:', uploadError);
-        throw new Error('Error uploading avatar.');
+    
+        console.log("Updated user:", updatedUser);
+        return true; // Return the new avatar URL
+    
+      } catch (error) {
+        console.error('Error:', error);
+        throw new Error('Error during the operation.');
       }
     },
+    
 
 
     deletePost: async (parent, { postId }, context) => {
