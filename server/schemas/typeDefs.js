@@ -56,6 +56,7 @@ type Auth {
 
 type Query {
   userFeed(userId: ID!): [Post!]!
+  getUserPosts(userId: ID!): [Post!]!
   me: User
   users: [User]
   user(username: String!): User

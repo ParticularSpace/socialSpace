@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
-import { GET_USER_PIC, GET_POSTS } from "../graphql/queries";
+import { GET_USER_PIC, GET_USER_POSTS } from "../graphql/queries";
 import { UPLOAD_AVATAR } from "../graphql/mutations";
 import jwt_decode from "jwt-decode";
 import Header from '../components/Header';
@@ -38,24 +38,29 @@ export function Profile() {
   const username = decodedToken.data.username;
   const _id = decodedToken.data._id;
 
-  const { loading, error, data } = useQuery(GET_POSTS, { variables: { _id } });
+  const { loading, error, data } = useQuery(GET_USER_POSTS, { variables: { userId: _id } });
+
   const { loading: userLoading, error: userError, data: userData } = useQuery(GET_USER_PIC, { variables: { username } });
 
-  
-// Moved useEffect up here
-useEffect(() => {
-  if (userData && userData.user && userData.user.bio) {
-    setUserBio(userData.user.bio);
-  }
-}, [userData]);
 
-console.log(userData);
+  // Moved useEffect up here
+  useEffect(() => {
+    if (userData && userData.user && userData.user.bio) {
+      setUserBio(userData.user.bio);
+    }
+  }, [userData]);
 
-if (loading || userLoading) return <p>Loading...</p>;
-if (error || userError) return <p>Error: {error?.message || userError?.message}</p>;
 
-const user = userData.user;
 
+  if (loading || userLoading) return <p>Loading...</p>;
+  if (error || userError) return <p>Error: {error?.message || userError?.message}</p>;
+
+  const user = userData.user;
+
+  console.log(user);
+
+  const userPosts = data.getUserPosts;
+  console.log(userPosts);
 
   return (
     <div className="container mx-auto px-4 md:pt-16 pt-4">
@@ -91,7 +96,7 @@ const user = userData.user;
 
           <div className="flex mt-4">
             <div className="mr-8">
-              <span className="text-lg font-bold">{data.posts.length}</span> posts
+              <span className="text-lg font-bold">{userPosts.length}</span> posts
             </div>
             <div className="mr-8">
               {/* Replace '0' with actual data */}
@@ -105,14 +110,14 @@ const user = userData.user;
         </div>
       </div>
 
-       {/* Bio */}
+      {/* Bio */}
       <div className="mt-6 p-4 bg-gray-100 border rounded">
         <p>{userBio || 'Short bio or description'}</p>
       </div>
 
       {/* Posts Grid */}
       <div className="grid md:grid-cols-3 grid-cols-1 gap-4 mt-8">
-        {data.posts.map((post) => (
+        {userPosts.map((post) => (
           <div className="relative w-full pb-[100%] md:pb-[100%] rounded hover:shadow-lg">
             <img src={post.photo} alt={post.content} className="absolute top-0 left-0 w-full h-full rounded object-cover" />
             <div className="absolute top-0 left-0 w-full h-full rounded flex items-center justify-center text-white transition-opacity duration-300 hover:opacity-100 opacity-0">

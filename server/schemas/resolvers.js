@@ -58,6 +58,16 @@ const resolvers = {
 
       return feed || [];
     },
+    getUserPosts: async (_, { userId }, context) => {
+    
+      if (!context.user) {
+        throw new Error('Authentication required!');
+      }
+     
+      const posts = await Post.find({ user: userId }).populate('user').populate('likes').populate('comments');
+     
+      return posts || [];
+    },
     me: async (parent, args, context) => {
       if (!context.user) {
         throw new AuthenticationError('Not logged in');
