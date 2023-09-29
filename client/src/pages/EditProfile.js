@@ -21,6 +21,7 @@ const EditProfile = () => {
   
     if (username) updatedFields.username = username;
     if (email) updatedFields.email = email;
+    if (bio) updatedFields.bio = bio;
     if (profile_picture) updatedFields.profile_picture = profile_picture; // Changed to profile_picture
   
     try {

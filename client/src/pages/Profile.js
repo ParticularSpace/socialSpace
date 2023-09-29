@@ -49,7 +49,7 @@ useEffect(() => {
   }
 }, [userData]);
 
-console.log(userData.user);
+console.log(userData);
 
 if (loading || userLoading) return <p>Loading...</p>;
 if (error || userError) return <p>Error: {error?.message || userError?.message}</p>;

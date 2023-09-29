@@ -132,6 +132,7 @@ export const UPDATE_PROFILE = gql`
       _id
       username
       email
+      bio
       profile_picture
     }
   }

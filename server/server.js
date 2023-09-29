@@ -24,7 +24,6 @@ app.use(cors(corsOptions));
 
 const getUserFromToken = async (token) => {
   if (!token) {
-    console.log("Token not provided");
     return null;
   }
   try {

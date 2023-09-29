@@ -205,11 +205,23 @@ const resolvers = {
     // WORKS FOR NOW DONT TOUCH
 
     addUser: async (parent, { username, email, password, date_of_birth }) => {
-      const user = await User.create({ username, email, password, date_of_birth });
-      const token = signToken(user);
-
-      return { token, user };
+      try {
+        // Check if user already exists
+        const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+        if (existingUser) {
+          throw new Error('User with this email or username already exists.');
+        }
+    
+        const user = await User.create({ username, email, password, date_of_birth });
+        const token = signToken(user);
+    
+        return { token, user };
+      } catch (error) {
+        console.error(error);
+        throw new Error('Failed to create the user.');
+      }
     },
+    
     login: async (parent, { email, password }) => {
 
       const user = await User.findOne({ email });
@@ -266,9 +278,9 @@ const resolvers = {
 
             const isSafe = await moderateImage(photoUrl);
 
-            if(isSafe === false) {
+            if (isSafe === false) {
               return new Error('Your post contains inappropriate content.');
-              
+
             }
 
 
@@ -395,10 +407,10 @@ const resolvers = {
 
       const moderatedContentComment = await moderateText(content);
 
-        if (moderatedContentComment === "0") {
-          throw new Error('Your post contains inappropriate content.');
-          return;
-        }
+      if (moderatedContentComment === "0") {
+        throw new Error('Your post contains inappropriate content.');
+        return;
+      }
 
 
 
@@ -525,69 +537,50 @@ const resolvers = {
       return updatedUser;
     },
 
-//=====================
 
+    uploadAvatar: async (_, { avatar }, user) => {
+      if (!user) {
+        throw new AuthenticationError('You need to be logged in!');
+      }
 
+      if (!avatar) {
+        throw new Error('Please provide an image file.');
+      }
 
-
-
-
-
-
-uploadAvatar: async (_, { avatar }, user) => {
-  if (!user) {
-      throw new AuthenticationError('You need to be logged in!');
-  }
-
-  if (!avatar) {
-      throw new Error('Please provide an image file.');
-  }
-
-  const avatarDetails = await avatar;
-  const fileStream = avatarDetails.createReadStream();
-  const uniqueFilename = uuidv4() + '-' + avatarDetails.filename; 
-
-  try {
-      const avatarUrl = await uploadToS3(fileStream, uniqueFilename);
-      console.log("Uploaded avatar URL:", avatarUrl);
+      const avatarDetails = await avatar;
+      const fileStream = avatarDetails.createReadStream();
+      const uniqueFilename = uuidv4() + '-' + avatarDetails.filename;
 
       try {
+        const avatarUrl = await uploadToS3(fileStream, uniqueFilename);
+        console.log("Uploaded avatar URL:", avatarUrl);
+
+        try {
           console.log("Updating user:", user);
           const updatedUser = await User.findByIdAndUpdate(
-              { _id: user.user._id.toString() },
-              { profile_picture: avatarUrl },
-              { new: true } // Get the updated document
+            { _id: user.user._id.toString() },
+            { profile_picture: avatarUrl },
+            { new: true } // Get the updated document
           );
 
           if (!updatedUser) {
-              throw new Error("User not found or update failed.");
+            throw new Error("User not found or update failed.");
           }
 
           console.log("Updated user:", updatedUser);
 
           return true;
-      } catch (dbError) {
+        } catch (dbError) {
           console.error('Error updating database:', dbError);
           throw new Error('Error updating avatar in the database.');
+        }
+
+      } catch (uploadError) {
+        console.error('Error uploading avatar:', uploadError);
+        throw new Error('Error uploading avatar.');
       }
+    },
 
-  } catch (uploadError) {
-      console.error('Error uploading avatar:', uploadError);
-      throw new Error('Error uploading avatar.');
-  }
-},
-
-
-
-
-
-
-
-
-
-
-
-//============================
 
     deletePost: async (parent, { postId }, context) => {
       if (context.user) {
