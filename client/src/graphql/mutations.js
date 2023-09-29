@@ -119,16 +119,23 @@ export const DELETE_COMMENT = gql`
   }
 `;
 
-const CHECK_IMAGE = gql`
-  mutation CheckImage($file: Upload!) {
-    checkImage(file: $file)
-  }
-`;
-
 
 export const UPLOAD_AVATAR = gql`
   mutation uploadAvatar($avatar: Upload!) {
     uploadAvatar(avatar: $avatar)
   }
 `;
+
+export const UPDATE_PROFILE = gql`
+  mutation updateProfile($username: String, $email: String, $date_of_birth: String, $profile_picture: Upload) {
+    updateProfile(username: $username, email: $email, date_of_birth: $date_of_birth, profile_picture: $profile_picture) {
+      _id
+      username
+      email
+      profile_picture
+    }
+  }
+`;
+
+
 

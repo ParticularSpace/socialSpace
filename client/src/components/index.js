@@ -4,7 +4,8 @@ export { default as Profile } from '../pages/Profile';
 export { default as Home } from '../pages/Home';
 export { default as Header } from './Header';
 export { default as Stars } from './DarkMode';
-export { default as CreatePost } from './CreatePost';
+export { default as CreatePost } from '../pages/CreatePost';
+export { default as EditProfile } from '../pages/EditProfile';
 
 
 export { default as Dice } from './LightMode';

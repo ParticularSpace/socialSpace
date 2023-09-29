@@ -12,6 +12,7 @@ const typeDefs = gql`
     email: String!
     date_of_birth: String!
     profile_picture: String
+    bio: String
     interests: [String]
     posts: [Post]
     comments: [Comment]
@@ -77,6 +78,7 @@ type Mutation {
   uploadAvatar(avatar: Upload!): Boolean
   uploadCardMedia(cardmedia: Upload!): Boolean
   checkImage(file: Upload!): Boolean
+  updateProfile(username: String, email: String, bio: String, profile_picture: Upload): User
 }
 
 

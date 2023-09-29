@@ -483,6 +483,48 @@ const resolvers = {
       return updatedPost;
     },
 
+    updateProfile: async (_, { username, email, bio, profile_picture }, context) => {
+      if (!context.user) {
+        throw new AuthenticationError('You need to be logged in to update your profile');
+      }
+
+      const update = {};
+
+      if (username) {
+        update.username = username;
+      }
+
+      if (email) {
+        update.email = email;
+      }
+
+      if (bio) {
+        update.bio = bio;
+      }
+
+      if (profile_picture) {
+        const photoDetails = await profile_picture;
+        const fileStream = photoDetails.createReadStream();
+        const uniqueFilename = uuidv4() + "-" + photoDetails.filename;
+
+        try {
+          const photoUrl = await uploadToS3(fileStream, uniqueFilename);
+          update.profile_picture = photoUrl;
+        } catch (error) {
+          console.error("Error uploading to S3:", error);
+          throw new Error('Error uploading image to S3.');
+        }
+      }
+
+      const updatedUser = await User.findByIdAndUpdate(
+        context.user._id,
+        update,
+        { new: true }
+      );
+
+      return updatedUser;
+    },
+
 //=====================
 
 

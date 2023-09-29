@@ -14,11 +14,8 @@ Social Space is a comprehensive social networking platform enabling users to con
 
 - [Features](#features)
 - [Technologies](#technologies)
-- [Installation](#installation)
-- [Deployment](#deployment)
 - [Credits](#credits)
 - [License](#license)
-- [Tests](#tests)
 - [Questions](#questions)
 
 ## Features

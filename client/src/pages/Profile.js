@@ -1,14 +1,17 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { GET_USER_PIC, GET_POSTS } from "../graphql/queries";
 import { UPLOAD_AVATAR } from "../graphql/mutations";
 import jwt_decode from "jwt-decode";
 import Header from '../components/Header';
+import { useNavigate } from 'react-router-dom';
+
 
 export function Profile() {
   const [avatarFile, setAvatarFile] = useState(null);
   const avatarFileInputRef = useRef(null);
-
+  const navigate = useNavigate();
+  const [userBio, setUserBio] = useState('');
   const [uploadAvatar] = useMutation(UPLOAD_AVATAR);
 
   const handleAvatarFileChange = (event) => {
@@ -28,6 +31,8 @@ export function Profile() {
     }
   };
 
+
+
   const token = localStorage.getItem("id_token");
   const decodedToken = jwt_decode(token);
   const username = decodedToken.data.username;
@@ -36,10 +41,21 @@ export function Profile() {
   const { loading, error, data } = useQuery(GET_POSTS, { variables: { _id } });
   const { loading: userLoading, error: userError, data: userData } = useQuery(GET_USER_PIC, { variables: { username } });
 
-  if (loading || userLoading) return <p>Loading...</p>;
-  if (error || userError) return <p>Error: {error?.message || userError?.message}</p>;
+  
+// Moved useEffect up here
+useEffect(() => {
+  if (userData && userData.user && userData.user.bio) {
+    setUserBio(userData.user.bio);
+  }
+}, [userData]);
 
-  const user = userData.user;
+console.log(userData.user);
+
+if (loading || userLoading) return <p>Loading...</p>;
+if (error || userError) return <p>Error: {error?.message || userError?.message}</p>;
+
+const user = userData.user;
+
 
   return (
     <div className="container mx-auto px-4 md:pt-16 pt-4">
@@ -50,7 +66,7 @@ export function Profile() {
       <div className="fixed top-0 left-0 w-full bg-white z-10 hidden md:block">
         <Header />
       </div>
-  
+
       {/* Profile section */}
       <div className="flex items-center mt-0">
         <div className="w-1/4 ml-4">
@@ -63,12 +79,16 @@ export function Profile() {
             <button className="block mx-auto mt-2 bg-blue-500 text-white rounded p-1" onClick={handleUploadAvatar}>Upload Avatar</button>
           )}
         </div>
-        
+
         <div className="w-3/4 md:ml-6 ml-4">
           <h1 className="text-2xl font-bold">{username}</h1>
-          <button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200">
+          <button
+            className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200"
+            onClick={() => navigate('/edit-profile')}
+          >
             Edit Profile
           </button>
+
           <div className="flex mt-4">
             <div className="mr-8">
               <span className="text-lg font-bold">{data.posts.length}</span> posts
@@ -84,14 +104,14 @@ export function Profile() {
           </div>
         </div>
       </div>
-      
-      {/* Bio */}
+
+       {/* Bio */}
       <div className="mt-6 p-4 bg-gray-100 border rounded">
-        <p>Short bio or description</p>
+        <p>{userBio || 'Short bio or description'}</p>
       </div>
 
-        {/* Posts Grid */}
-        <div className="grid md:grid-cols-3 grid-cols-1 gap-4 mt-8">
+      {/* Posts Grid */}
+      <div className="grid md:grid-cols-3 grid-cols-1 gap-4 mt-8">
         {data.posts.map((post) => (
           <div className="relative w-full pb-[100%] md:pb-[100%] rounded hover:shadow-lg">
             <img src={post.photo} alt={post.content} className="absolute top-0 left-0 w-full h-full rounded object-cover" />

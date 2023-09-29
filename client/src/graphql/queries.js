@@ -124,6 +124,7 @@ query GetUserPic($username: String!) {
   user(username: $username) {
     username
     profile_picture
+   
   }
 }
 `;
