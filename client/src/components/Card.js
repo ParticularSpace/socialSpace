@@ -29,7 +29,7 @@ export default function PostCard({ post }) {
 
   React.useEffect(() => {
     if (showComments && commentsEndRef.current) {
-      commentsEndRef.current.scrollIntoView({ behavior: "smooth" });
+      console.log("Scrolling to bottom remove this feature later lol ;)");
     }
   }, [showComments]);
 
@@ -352,11 +352,14 @@ export default function PostCard({ post }) {
                   ref={idx === 0 ? commentsEndRef : null}
                   id={comment._id}
                 >
+
                   {/* Main Content */}
-                  <div className="flex-1 flex flex-col items-start justify-start">
-                    <strong className="text-sm text-gray-700">{comment.user.username}</strong>
-                    <p className="text-xs text-gray-600 w-full break-words">{comment.content}</p> {/* Added 'break-words' to handle long text */}
+                  <div className="flex-1 flex flex-col items-start justify-start text-left">
+                    <strong className="text-sm text-gray-700 block">{comment.user.username}</strong>
+                    <p className="text-xs text-gray-600 w-full break-words block mt-1 text-left">{comment.content}</p>
                   </div>
+
+
                   {/* Side Content */}
                   <div className="flex flex-col items-end ml-4"> {/* Added 'ml-4' for spacing */}
                     <p className="text-xs text-gray-400">
@@ -385,7 +388,7 @@ export default function PostCard({ post }) {
                 placeholder="Add a comment"
               />
               <button
-                className="mt-2 w-full bg-blue-500 text-white py-1 px-2 rounded"
+                className="mt-2 w-full mb-4 bg-blue-500 text-white py-1 px-2 rounded"
                 onClick={() => handleCommentSubmit(post._id)}
               >
                 Post Comment
