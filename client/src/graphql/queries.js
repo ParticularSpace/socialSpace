@@ -130,3 +130,51 @@ query GetUserPic($username: String!) {
 }
 `;
 
+export const GET_FRIENDS = gql`
+  query GetFriends {
+    friends {
+      _id
+      username
+    }
+  }
+`;
+
+
+export const GET_FOLLOWERS = gql`
+  query GetFollowers {
+    followers {
+      _id
+      username
+    }
+  }
+`;
+
+
+export const GET_FOLLOWING = gql`
+  query GetFollowing {
+    following {
+      _id
+      username
+    }
+  }
+`;
+
+export const GET_FRIEND_REQUESTS = gql`
+  query GetFriendRequests {
+    friendRequests {
+      _id
+      username
+    }
+  }
+`;
+
+// search for users
+export const SEARCH_USERS = gql`
+  query searchUsers($searchTerm: String!) {
+    searchUsers(searchTerm: $searchTerm) {
+      _id
+      username
+    }
+  }
+`;
+
