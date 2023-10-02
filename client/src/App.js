@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import { Canvas } from '@react-three/fiber';
-import { Dice, Login, Register, Profile, Home, Header, Stars, CreatePost, EditProfile } from './components';
+import { Dice, Login, Register, Profile, Home, Header, Stars, CreatePost, EditProfile, Friends } from './components';
 
 function App() {
   const [LightTheme, setLightTheme] = useState(false);
@@ -20,6 +20,7 @@ function App() {
             <Route path="/edit-profile" element={<EditProfile />} />
             <Route path="/home" element={<Home />} />
             <Route path="/createpost" element={<CreatePost />} />
+            <Route path="/friends" element={<Friends />} />
             <Route path="/" element={<Login />} />
           </Routes>
         </Router>

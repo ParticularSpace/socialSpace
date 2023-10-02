@@ -6,6 +6,6 @@ export { default as Header } from './Header';
 export { default as Stars } from './DarkMode';
 export { default as CreatePost } from '../pages/CreatePost';
 export { default as EditProfile } from '../pages/EditProfile';
-
+export { default as Friends } from '../pages/Friends';
 
 export { default as Dice } from './LightMode';

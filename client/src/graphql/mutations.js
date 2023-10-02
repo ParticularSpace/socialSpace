@@ -138,5 +138,49 @@ export const UPDATE_PROFILE = gql`
   }
 `;
 
+export const ADD_FRIEND = gql`
+  mutation addFriend($friendId: ID!) {
+    addFriend(friendId: $friendId) {
+      _id
+      username
+      email
+      bio
+      profile_picture
+    }
+  }
+`;
 
+
+export const ACCEPT_FRIEND_REQUEST = gql`
+ mutation acceptFriendRequest($friendId: ID!) {
+   acceptFriendRequest(friendId: $friendId) {
+     _id
+     username
+     email
+     bio
+     profile_picture
+   }
+ }`
+
+export const DECLINE_FRIEND_REQUEST = gql`
+  mutation declineFriendRequest($friendId: ID!) {
+    declineFriendRequest(friendId: $friendId) {
+      _id
+      username
+      email
+      bio
+      profile_picture
+    }
+  }`
+
+export const REMOVE_FRIEND = gql`
+  mutation removeFriend($friendId: ID!) {
+    removeFriend(friendId: $friendId) {
+      _id
+      username
+      email
+      bio
+      profile_picture
+    }
+  }`
 

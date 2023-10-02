@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useMutation, gql } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { ADD_POST } from '../graphql/mutations';
 
 function CreatePost() {

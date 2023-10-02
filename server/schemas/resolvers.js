@@ -9,9 +9,6 @@ const moderateText = require('../utils/ai/moderateText');
 const moderateImage = require('../utils/ai/moderateImage');
 const generateFeed = require('../algorithms/feed_generator');
 
-// const { createWriteStream } = require('fs');
-
-
 const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
@@ -158,8 +155,6 @@ const resolvers = {
 
 
     },
-
-
     likes: async (parent, { username }) => {
 
 
@@ -180,7 +175,6 @@ const resolvers = {
         throw new Error(`Failed to fetch likes for username: ${username}. Error: ${error.message}`);
       }
     },
-
     like: async (_, { postId }, context) => {
 
       if (!context.user) {
@@ -203,6 +197,51 @@ const resolvers = {
       await newLike.save();
 
       return newLike;  // If needed, otherwise you can return a simple message or the updated post
+    },
+    // Friends section
+    getFriends: async (_, __, context) => {
+      if (!context.user) {
+        throw new AuthenticationError('You need to be logged in!');
+      }
+
+      const user = await User.findById(context.user._id)
+        .populate('friends')
+        .populate('friendRequests')
+        .populate('sentRequests');
+
+      return user.friends;
+    },
+    getFollowers: async (_, __, context) => {
+      if (!context.user) {
+        throw new AuthenticationError('You need to be logged in!');
+      }
+
+      const user = await User.findById(context.user._id)
+        .populate('followers');
+
+      return user.followers;
+    },
+    getFollowing: async (_, __, context) => {
+      if (!context.user) {
+        throw new AuthenticationError('You need to be logged in!');
+      }
+
+      const user = await User.findById(context.user._id)
+        .populate('following');
+
+      return user.following;
+    },
+    searchUsers: async (_, { searchTerm }, context) => {
+      if (!context.user) {
+        throw new AuthenticationError('You need to be logged in!');
+      }
+
+      const users = await User.find({ username: { $regex: searchTerm, $options: 'i' } })
+        .populate('friends')
+        .populate('friendRequests')
+        .populate('sentRequests');
+
+      return users;
     },
 
 
@@ -231,7 +270,6 @@ const resolvers = {
         throw new Error('Failed to create the user.');
       }
     },
-    
     login: async (parent, { email, password }) => {
 
       const user = await User.findOne({ email });
@@ -250,8 +288,6 @@ const resolvers = {
 
       return { token, user };
     },
-
-
     addPost: async (_, { content, photo }, context) => {
       console.log("addPost resolver");
 
@@ -318,7 +354,6 @@ const resolvers = {
       }
 
     },
-
     likePost: async (_, { postId }, context) => {
       if (!context.user) {
         throw new AuthenticationError('You need to be logged in to like a post');
@@ -363,12 +398,6 @@ const resolvers = {
 
       return updatedPost;
     },
-
-
-
-
-
-
     unlikePost: async (_, { postId }, context) => {
       if (!context.user) {
         throw new AuthenticationError('You need to be logged in to unlike a post');
@@ -404,12 +433,6 @@ const resolvers = {
 
       return updatedPost;
     },
-
-
-
-
-
-
     addComment: async (_, { postId, content }, context) => {
       if (!context.user) {
         throw new AuthenticationError('You need to be logged in to comment on a post');
@@ -461,7 +484,6 @@ const resolvers = {
         throw new Error('There was an issue adding the comment. Please try again later.');
       }
     },
-
     deleteComment: async (_, { postId, commentId }, context) => {
       // You can use Promise.all to fetch comment and post concurrently
       const [comment, post] = await Promise.all([
@@ -504,7 +526,6 @@ const resolvers = {
 
       return updatedPost;
     },
-
     updateProfile: async (_, { username, email, bio, profile_picture }, context) => {
       if (!context.user) {
         throw new AuthenticationError('You need to be logged in to update your profile');
@@ -546,8 +567,6 @@ const resolvers = {
 
       return updatedUser;
     },
-
-
     uploadAvatar: async (_, { avatar }, user) => {
       if (!user) {
         throw new AuthenticationError('You need to be logged in!');
@@ -583,9 +602,6 @@ const resolvers = {
         throw new Error('Error during the operation.');
       }
     },
-    
-
-
     deletePost: async (parent, { postId }, context) => {
       if (context.user) {
         const post = await Post.findByIdAndDelete({ _id: postId });
@@ -600,6 +616,131 @@ const resolvers = {
       }
       throw new AuthenticationError('You need to be logged in!');
     },
+
+    // Friends mutation section
+    addFriend: async (_, { friendId }, context) => {
+      if (!context.user) {
+        throw new AuthenticationError('You need to be logged in!');
+      }
+
+      const friend = await User.findById(friendId);
+
+      if (!friend) {
+        throw new Error('Friend not found!');
+      }
+
+      // Add friend to the current user's friendRequests
+      await User.findByIdAndUpdate(
+        { _id: context.user._id },
+        { $addToSet: { friendRequests: friend._id } },
+        { new: true }
+      );
+
+      // Add current user to the friend's sentRequests
+      await User.findByIdAndUpdate(
+        { _id: friend._id },
+        { $addToSet: { sentRequests: context.user._id } },
+        { new: true }
+      );
+
+      return friend;
+    },
+    acceptFriendRequest: async (_, { friendId }, context) => {
+      if (!context.user) {
+        throw new AuthenticationError('You need to be logged in!');
+      }
+
+      const friend = await User.findById(friendId);
+
+      if (!friend) {
+        throw new Error('Friend not found!');
+      }
+
+      // Add friend to the current user's friends
+      await User.findByIdAndUpdate(
+        { _id: context.user._id },
+        { $addToSet: { friends: friend._id } },
+        { new: true }
+      );
+
+      // Add current user to the friend's friends
+      await User.findByIdAndUpdate(
+        { _id: friend._id },
+        { $addToSet: { friends: context.user._id } },
+        { new: true }
+      );
+
+      // Remove friend from the current user's friendRequests
+      await User.findByIdAndUpdate(
+        { _id: context.user._id },
+        { $pull: { friendRequests: friend._id } },
+        { new: true }
+      );
+
+      // Remove current user from the friend's sentRequests
+      await User.findByIdAndUpdate(
+        { _id: friend._id },
+        { $pull: { sentRequests: context.user._id } },
+        { new: true }
+      );
+
+      return friend;
+    },
+    declineFriendRequest: async (_, { friendId }, context) => {
+      if (!context.user) {
+        throw new AuthenticationError('You need to be logged in!');
+      }
+
+      const friend = await User.findById(friendId);
+
+      if (!friend) {
+        throw new Error('Friend not found!');
+      }
+
+      // Remove friend from the current user's friendRequests
+      await User.findByIdAndUpdate(
+        { _id: context.user._id },
+        { $pull: { friendRequests: friend._id } },
+        { new: true }
+      );
+
+      // Remove current user from the friend's sentRequests
+      await User.findByIdAndUpdate(
+        { _id: friend._id },
+        { $pull: { sentRequests: context.user._id } },
+        { new: true }
+      );
+
+      return friend;
+    },
+    removeFriend: async (_, { friendId }, context) => {
+      if (!context.user) {
+        throw new AuthenticationError('You need to be logged in!');
+      }
+
+      const friend = await User.findById(friendId);
+
+      if (!friend) {
+        throw new Error('Friend not found!');
+      }
+
+      // Remove friend from the current user's friends
+      await User.findByIdAndUpdate(
+        { _id: context.user._id },
+        { $pull: { friends: friend._id } },
+        { new: true }
+      );
+
+      // Remove current user from the friend's friends
+      await User.findByIdAndUpdate(
+        { _id: friend._id },
+        { $pull: { friends: context.user._id } },
+        { new: true }
+      );
+
+      return friend;
+    },
+
 
   },
 };

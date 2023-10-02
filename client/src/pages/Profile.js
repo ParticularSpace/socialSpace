@@ -30,6 +30,10 @@ export function Profile() {
 
   const userPosts = data.getUserPosts;
 
+  const goToFriends = () => {
+    navigate('/friends');
+  };
+
   return (
     <div className="container mx-auto px-4 md:pt-16 pt-4">
       {/* Header */}
@@ -61,13 +65,13 @@ export function Profile() {
             <div className="mr-8">
               <span className="text-lg font-bold">{userPosts.length}</span> posts
             </div>
-            <div className="mr-8">
+            <div className="mr-8 cursor-pointer" onClick={goToFriends}>
               {/* Replace '0' with actual data */}
-              <span className="text-lg font-bold">0</span> followers
+              <span className="text-lg font-bold">0</span> <span>followers</span>
             </div>
-            <div>
+            <div className="cursor-pointer" onClick={goToFriends}>
               {/* Replace '0' with actual data */}
-              <span className="text-lg font-bold">0</span> following
+              <span className="text-lg font-bold">0</span> <span>following</span>
             </div>
           </div>
         </div>
@@ -75,28 +79,37 @@ export function Profile() {
 
       {/* Bio */}
       <div className="mt-6 p-4 bg-gray-100 border rounded">
-        <p>{userBio || 'Short bio or description'}</p>
+        <p>{userBio || <span className="text-gray-400">Short bio or description (Click 'Edit Profile' to update)</span>}</p>
       </div>
 
       {/* Posts Grid */}
       <div className="grid md:grid-cols-3 grid-cols-1 gap-4 mt-8">
-        {userPosts.map((post) => (
-          <div className="relative w-full pb-[100%] md:pb-[100%] rounded hover:shadow-lg">
-            <img src={post.photo} alt={post.content} className="absolute top-0 left-0 w-full h-full rounded object-cover" />
-            <div className="absolute top-0 left-0 w-full h-full rounded flex items-center justify-center text-white transition-opacity duration-300 hover:opacity-100 opacity-0">
-              <span className="text-sm bg-black bg-opacity-70 rounded p-1">
-                {post.content}
-              </span>
-            </div>
-          </div>
-        ))}
+        {loading ? (
+          <p className="text-center text-gray-500">Loading posts...</p>
+        ) : error ? (
+          <p className="text-center text-red-500">{`Error: ${error.message}`}</p>
+        ) : (
+          userPosts.map((post) => (
+            post.photo ? (
+              <div className="relative w-full pb-[100%] md:pb-[100%] rounded hover:shadow-lg">
+                <img src={post.photo} alt={post.content} className="absolute top-0 left-0 w-full h-full rounded object-cover" />
+                <div className="absolute top-0 left-0 w-full h-full rounded flex items-center justify-center text-white transition-opacity duration-300 hover:opacity-100 opacity-0">
+                  <span className="text-sm bg-black bg-opacity-70 rounded p-1">
+                    {post.content}
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <div className="w-full h-40 md:h-60 flex items-center justify-center bg-gray-200 rounded hover:shadow-lg">
+                <p className="text-center text-gray-700">{post.content}</p>
+              </div>
+            )
+          ))
+        )}
       </div>
+
     </div>
   );
 }
 
 export default Profile;
-
-
-
-
