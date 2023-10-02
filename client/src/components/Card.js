@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React from "react";
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import placeholder from "./img/in_img.png";
 
@@ -266,37 +266,47 @@ export default function PostCard({ post }) {
     <div className="relative bg-gray-200 rounded-lg w-96 h-auto border-2 border-gray-400 m-4">
       {/* Profile Header Section */}
       <div className="bg-white p-2 flex rounded-lg items-center">
-    <img className="w-10 h-10 rounded-full" alt={post.user.username} src={post.user.profile_picture} />
-    <div className="ml-2 flex flex-col">
-      <h1 className="text-gray-700 text-sm font-semibold">{post.user.username}</h1>
-    </div>
-  </div>
-
-      {/* Post Image */}
-      {post.photo && (
-        <img
-          className="h-60 w-full object-cover"
-          src={post.photo ? post.photo : placeholder}
-          alt="Post"
-        />
-      )}
-
-      {/* Post Content */}
-      <div className="p-4">
-        <p className="text-sm text-gray-700">
-          {renderContentWithHashtags(post.content)}
-        </p>
-        {/* Caption Section */}
-        {post.caption && <p className="text-sm text-gray-500">{post.caption}</p>}
+        <img className="w-10 h-10 rounded-full" alt={post.user.username} src={post.user.profile_picture} />
+        <div className="ml-2 flex flex-col">
+          <h1 className="text-gray-700 text-sm font-semibold">{post.user.username}</h1>
+        </div>
       </div>
+
+      {/* Conditional layout based on the presence of an image */}
+      {post.photo ? (
+        <>
+          {/* Post Image */}
+          <img
+            className="h-60 w-full object-cover"
+            src={post.photo ? post.photo : placeholder}
+            alt="Post"
+          />
+          {/* Post Content */}
+          <div className="p-4">
+            <p className="text-sm text-gray-700">
+              {renderContentWithHashtags(post.content)}
+            </p>
+          </div>
+        </>
+      ) : (
+        <div className="p-4 flex flex-col items-center justify-center">
+          {/* Post Content */}
+          <p className="text-lg text-gray-700 mb-2 text-center">
+            {renderContentWithHashtags(post.content)}
+          </p>
+        </div>
+      )}
+      {/* Caption Section */}
+      {post.caption && <p className="text-sm text-gray-500">{post.caption}</p>}
 
       {/* Timestamp Section */}
       <p className="text-xs text-gray-400 px-4">
-        {new Date(post.createdAt).toString() !== 'Invalid Date'
-          ? formatDistanceToNow(new Date(post.createdAt)) + ' ago'
+        {new Date(Number(post.createdAt)).toString() !== 'Invalid Date'
+          ? formatDistanceToNow(new Date(Number(post.createdAt))) + ' ago'
           : 'Invalid Date'
         }
       </p>
+
 
 
       <div className="flex flex-col items-center justify-center p-4">
@@ -331,56 +341,60 @@ export default function PostCard({ post }) {
         </div>
       </div>
 
-      {showComments && (
-  <div className="w-full h-[50%] overflow-y-auto border-t border-gray-300">
-    <div className="p-2" ref={commentsTopRef}>
-      {post.comments.map((comment, idx) => (
-        <div
-          key={comment._id}
-          className="p-2 border-b border-gray-200 relative" // Add 'relative' for positioning
-          ref={idx === 0 ? commentsEndRef : null}
-          id={comment._id}
-        >
-          {/* Delete button - moved outside flex */}
-          {(currentUser._id === comment.user._id || currentUser._id === post.user._id) && (
-            <button
-              className="absolute top-0 right-0 text-xs text-red-500"
-              onClick={() => handleDeleteComment(post._id, comment._id)}
-            >
-              🗑️
-            </button>
-          )}
-          <div className="flex justify-between items-center">
-            <div>
-              <strong className="text-sm text-gray-700">{comment.user.username}</strong>
-              <p className="text-xs text-gray-600">{comment.content}</p>
+      {
+        showComments && (
+          <div className="w-full h-[50%] overflow-y-auto border-t border-gray-300">
+            <div className="p-2" ref={commentsTopRef}>
+              {post.comments.map((comment, idx) => (
+                <div
+                  key={comment._id}
+                  className="p-2 border-b border-gray-200 relative flex flex-wrap" // Add 'flex-wrap' for responsiveness
+                  ref={idx === 0 ? commentsEndRef : null}
+                  id={comment._id}
+                >
+                  {/* Main Content */}
+                  <div className="flex-1 flex flex-col items-start justify-start">
+                    <strong className="text-sm text-gray-700">{comment.user.username}</strong>
+                    <p className="text-xs text-gray-600 w-full break-words">{comment.content}</p> {/* Added 'break-words' to handle long text */}
+                  </div>
+                  {/* Side Content */}
+                  <div className="flex flex-col items-end ml-4"> {/* Added 'ml-4' for spacing */}
+                    <p className="text-xs text-gray-400">
+                      {new Date(Number(comment.createdAt)).toString() !== 'Invalid Date'
+                        ? formatDistanceToNow(new Date(Number(comment.createdAt))) + ' ago'
+                        : 'Invalid Date'
+                      }
+                    </p>
+                    {(currentUser._id === comment.user._id || currentUser._id === post.user._id) && (
+                      <button
+                        className="text-xs text-red-500 mt-2"
+                        onClick={() => handleDeleteComment(post._id, comment._id)}
+                      >
+                        🗑️
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
-            <p className="text-xs text-gray-400">
-              {new Date(comment.createdAt).toString() !== 'Invalid Date'
-                ? formatDistanceToNow(new Date(comment.createdAt)) + ' ago'
-                : 'Invalid Date'
-              }
-            </p>
+            <div className="pt-2 px-2">
+              <input
+                className="w-full p-2 rounded border"
+                value={commentContent}
+                onChange={(e) => setCommentContent(e.target.value)}
+                placeholder="Add a comment"
+              />
+              <button
+                className="mt-2 w-full bg-blue-500 text-white py-1 px-2 rounded"
+                onClick={() => handleCommentSubmit(post._id)}
+              >
+                Post Comment
+              </button>
+            </div>
           </div>
-        </div>
-      ))}
-    </div>
-          <div className="pt-2 px-2">
-            <input
-              className="w-full p-2 rounded border"
-              value={commentContent}
-              onChange={(e) => setCommentContent(e.target.value)}
-              placeholder="Add a comment"
-            />
-            <button
-              className="mt-2 w-full bg-blue-500 text-white py-1 px-2 rounded"
-              onClick={() => handleCommentSubmit(post._id)}
-            >
-              Post Comment
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
+        )
+      }
+
+    </div >
   );
 }
