@@ -29,7 +29,7 @@ const UserSchema = new mongoose.Schema({
   },
   profile_picture: {
     type: String,
-    default: '',
+    default: '/images/default.png',
   },
   voice: {
     type: Number, 

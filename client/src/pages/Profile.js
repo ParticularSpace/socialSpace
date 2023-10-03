@@ -47,9 +47,11 @@ export function Profile() {
       {/* Profile section */}
       <div className="flex items-center mt-0">
         <div className="w-1/4 ml-4">
-          <div className={`relative mx-auto rounded-full hover:shadow-lg cursor-pointer w-20 h-20 md:w-32 md:h-32`}>
+      
+            <button className={`relative mx-auto rounded-full hover:shadow-lg cursor-pointer w-20 h-20 md:w-32 md:h-32`} onClick={() => navigate('/edit-profile')} >
             {user.profile_picture && <img src={user.profile_picture} alt="Profile Avatar" className="w-full h-full rounded-full object-cover" />}
-          </div>
+            </button>
+          
         </div>
 
         <div className="w-3/4 md:ml-6 ml-4">
