@@ -5,6 +5,8 @@ import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 import { setContext } from '@apollo/link-context';
 import { createUploadLink } from 'apollo-upload-client';
 
+
+
 // Use an environment variable or default to localhost
 const APOLLO_SERVER_ENDPOINT = process.env.REACT_APP_APOLLO_SERVER_ENDPOINT || 'http://localhost:3001/graphql';
 

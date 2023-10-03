@@ -1,6 +1,6 @@
 import React from "react";
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
-import placeholder from "./img/in_img.png";
+
 
 
 import { useQuery, useMutation } from "@apollo/client";
@@ -278,7 +278,7 @@ export default function PostCard({ post }) {
           {/* Post Image */}
           <img
             className="h-60 w-full object-cover"
-            src={post.photo ? post.photo : placeholder}
+            src={post.photo ? post.photo : null}
             alt="Post"
           />
           {/* Post Content */}

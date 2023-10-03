@@ -2,7 +2,8 @@ import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { UPDATE_PROFILE, UPLOAD_AVATAR } from '../graphql/mutations';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPen } from '@fortawesome/free-solid-svg-icons';
 
 const EditProfile = () => {
   const [username, setUsername] = useState(''); // Initialize to current username
@@ -10,32 +11,39 @@ const EditProfile = () => {
   const [bio, setBio] = useState('');           // Initialize to current bio
   const [profile_picture, setProfilePic] = useState(null); // Initialize to current 
   const [updateProfile, { loading, error }] = useMutation(UPDATE_PROFILE);
-
+  const [avatarLoading, setAvatarLoading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
 
   const [avatarFile, setAvatarFile] = useState(null); // New state
   const avatarFileInputRef = useRef(null);  // New ref
   const [uploadAvatar] = useMutation(UPLOAD_AVATAR); // New mutation
 
-  // Function to handle avatar file change
-  const handleAvatarFileChange = (event) => {
-    const file = event.target.files[0];
-    setAvatarFile(file);
-  };
-
-  // Function to handle avatar upload
-  const handleUploadAvatar = async () => {
-    try {
-      if (avatarFile) {
-        const { data } = await uploadAvatar({ variables: { avatar: avatarFile } });
-        if (data.uploadAvatar.success) {
-          setUploadSuccess(true);
-        }
+// Function to handle avatar upload
+const handleUploadAvatar = async () => {
+  setAvatarLoading(true);
+  try {
+    if (avatarFile) {
+      const { data } = await uploadAvatar({ variables: { avatar: avatarFile } });
+      if (data.uploadAvatar) {
+        setUploadSuccess(true);
+      } else {
+        setUploadSuccess(false);  
       }
-    } catch (error) {
-      console.error('Error uploading avatar:', error);
     }
-  };
+    setAvatarLoading(false);
+  } catch (error) {
+    console.error('Error uploading avatar:', error);
+    setUploadSuccess(false); 
+  }
+};
+
+// Function to handle file change and reset uploadSuccess
+const handleAvatarFileChange = (event) => {
+  const file = event.target.files[0];
+  setAvatarFile(file);
+  setUploadSuccess(false);  // Reset the uploadSuccess state
+};
+
 
   const navigate = useNavigate();
 
@@ -66,33 +74,59 @@ const EditProfile = () => {
 
 
   return (
-    <div className="container mx-auto mb-16 mt-4 md:mt-32">
-      <div className="bg-white rounded-lg shadow p-6">
-        <h1 className="text-2xl font-bold mb-4">Edit Profile</h1>
-        <form onSubmit={handleSubmit}>
-
+    <div className="container mx-auto px-4 py-8 mt-24">
+      <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
+        <h1 className="text-2xl font-semibold mb-4 px-4">Edit Profile</h1>
+        <form onSubmit={handleSubmit} className="p-4">
+  
           {/* Profile Picture Upload */}
-          <div className="mb-4 flex flex-col items-center">
-            {avatarFile && (
-              <img src={URL.createObjectURL(avatarFile)} alt="Uploaded preview" className="w-20 h-20 rounded-full object-cover mb-2" />
+          <div className="flex flex-col items-center mb-6">
+            <h2 className="text-lg font-medium mb-4">Profile Picture</h2>
+            <div className="relative inline-block mb-4">
+              {avatarFile ? (
+                <img
+                  src={URL.createObjectURL(avatarFile)}
+                  alt="Uploaded preview"
+                  className="w-24 h-24 rounded-full object-cover"
+                />
+              ) : (
+                profile_picture && (
+                  <img
+                    src={profile_picture}
+                    alt="Current profile"
+                    className="w-24 h-24 rounded-full object-cover"
+                  />
+                )
+              )}
+            </div>
+            {avatarFile ? (
+              <button
+                className="bg-blue-500 text-white rounded px-4 py-2"
+                onClick={handleUploadAvatar}
+              >
+                {avatarLoading ? 'Uploading...' : 'Upload'}
+              </button>
+            ) : (
+              <button
+                onClick={() => avatarFileInputRef.current.click()}
+                className="bg-blue-500 text-white rounded px-4 py-2 flex items-center justify-center"
+              >
+                <FontAwesomeIcon icon={faPen} />
+                <span className="ml-2">Edit</span>
+              </button>
             )}
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="profile_picture">
-              Profile Picture
-            </label>
             <input
               id="profile_picture"
               type="file"
               onChange={handleAvatarFileChange}
               ref={avatarFileInputRef}
-              className="w-full px-3 py-2 rounded border focus:outline-none focus:border-blue-500"
+              className="hidden"
             />
-            {avatarFile && (
-              <button className="mt-2 bg-blue-500 text-white rounded p-1" onClick={handleUploadAvatar}>
-                Upload Profile Picture
-              </button>
-            )}
-            {uploadSuccess && <span className="text-green-500 mt-2">✓ Uploaded successfully</span>}
+            {uploadSuccess && <span className="text-blue-500 mt-2">✓ Uploaded successfully</span>}
           </div>
+
+
+
 
 
           {/* Username */}
