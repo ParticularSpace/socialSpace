@@ -89,7 +89,7 @@ UserSchema.methods.isCorrectPassword = async function (password) {
 // generate JWT token
 UserSchema.methods.generateToken = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-    expiresIn: '24h',
+    expiresIn: '7d',
   });
 };
 
