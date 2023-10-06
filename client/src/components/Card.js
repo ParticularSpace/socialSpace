@@ -2,7 +2,7 @@ import React from "react";
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 
 
-
+   
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_ME } from "../graphql/queries";
 import {
@@ -14,6 +14,7 @@ import {
 import { GET_POST_BY_ID } from "../graphql/queries";
 import gql from "graphql-tag";
 
+// postcard to display posts
 export default function PostCard({ post }) {
   const { data, loading, error } = useQuery(GET_ME);
   const [likePost] = useMutation(LIKE_POST);
