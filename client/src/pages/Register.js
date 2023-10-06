@@ -48,7 +48,7 @@ export function Register() {
   return (
     <div className="flex flex-col items-center justify-center md:flex-row mt-32 overflow-hidden">
       <div className="flex flex-col-reverse md:flex-row bg-gray-700 rounded-lg w-full max-w-screen-lg">
-        
+
         {/* Informational Content */}
         <div className="w-full md:w-1/2 p-8 mb-8">
           <h1 className="text-white text-3xl font-semibold mb-4">Welcome to Social Space!</h1>
@@ -61,65 +61,71 @@ export function Register() {
             <li>Discover new interests</li>
           </ul>
         </div>
-        
+
         {/* Registration Form */}
         <div className="w-full md:w-1/2 p-8 bg-white rounded-r-lg">
           <h2 className="text-gray-700 text-2xl font-semibold mb-4">Register</h2>
           {errorMessage && <div className="text-red-500 mb-2">{errorMessage}</div>}
           <form onSubmit={handleSubmit} className="space-y-4">
-          <input 
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="w-full p-2 rounded border border-gray-300"
-          />
-          <input 
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 rounded border border-gray-300"
-          />
-          <input 
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 rounded border border-gray-300"
-          />
-          <input 
-            type="password"
-            placeholder="Confirm Password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-full p-2 rounded border border-gray-300"
-          />
-          <input 
-            type="date"
-            placeholder="Date of Birth"
-            value={dateOfBirth}
-            onChange={(e) => setDateOfBirth(e.target.value)}
-            className="w-full p-2 rounded border border-gray-300"
-          />
-            <button 
-    type="submit" 
-    className="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50">
-    Submit
-  </button>
+            <input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full p-2 rounded border border-gray-300"
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full p-2 rounded border border-gray-300"
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full p-2 rounded border border-gray-300"
+            />
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="w-full p-2 rounded border border-gray-300"
+            />
+            <label htmlFor="dob" className="block text-black text-sm font-medium">
+              Date of Birth
+            </label>
+            <div className="flex items-center">
+              <input
+                id="dob"
+                type="date"
+                value={dateOfBirth}
+                onChange={(e) => setDateOfBirth(e.target.value)}
+                className="w-full p-2 rounded border border-gray-300 bg-white text-black"
+              />
+            </div>
 
-  <br />
-  <br />
+            <button
+              type="submit"
+              className="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50">
+              Submit
+            </button>
 
-  <div className="text-center">
-    Already have an account?&nbsp;
-    <button 
-      type="button" 
-      onClick={() => navigate('/login')} 
-      className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
-      Login
-    </button>
-  </div>
+            <br />
+            <br />
+
+            <div className="text-center">
+              Already have an account?&nbsp;
+              <button
+                type="button"
+                onClick={() => navigate('/login')}
+                className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
+                Login
+              </button>
+            </div>
           </form>
         </div>
 
