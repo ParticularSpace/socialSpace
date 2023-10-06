@@ -47,7 +47,7 @@ export function Register() {
   return (
     <div className="flex flex-col items-center justify-center md:flex-row mt-32 overflow-hidden">
       <div className="flex flex-col-reverse md:flex-row bg-gray-700 rounded-lg w-full max-w-screen-lg">
-        
+
         {/* Informational Content */}
         <div className="w-full md:w-1/2 p-8 mb-8">
           <h1 className="text-white text-3xl font-semibold mb-4">Welcome to Social Space!</h1>
@@ -60,7 +60,7 @@ export function Register() {
             <li>Discover new interests</li>
           </ul>
         </div>
-        
+
         {/* Registration Form */}
         <div className="w-full md:w-1/2 p-8 bg-white rounded-r-lg">
           <h2 className="text-gray-700 text-2xl font-semibold mb-4">Register</h2>
@@ -101,8 +101,8 @@ export function Register() {
     Submit
   </button>
 
-  <br />
-  <br />
+            <br />
+            <br />
 
   <div className="text-center">
     Already have an account?&nbsp;
@@ -113,6 +113,7 @@ export function Register() {
       Login
     </button>
   </div>
+
           </form>
         </div>
 
