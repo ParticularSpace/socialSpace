@@ -14,9 +14,9 @@ const Header = () => {
 
   return (
     <div className="fixed inset-x-0 z-10 text-white mb-4">
-      <div className="max-w-screen-lg mx-auto flex justify-between items-center px-6 py-4">
+      <div className="max-w-screen-lg mx-auto flex items-center px-6 py-4">
         {/* Logo or App name */}
-        <div className="text-2xl font-bold md:block hidden">
+        <div className="text-2xl font-bold md:block hidden start-0">
           Social Space
         </div>
         
@@ -28,7 +28,7 @@ const Header = () => {
         </div>
         
         {/* Search Bar */}
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4 mx-4">
           <input
             type="text"
             placeholder="Search..."
@@ -39,7 +39,7 @@ const Header = () => {
         </div>
         
         {/* Navigation */}
-        <div className={`flex space-x-4 ${menuOpen ? 'block' : 'hidden'} md:flex`}>
+        <div className={`flex end space-x-4 ${menuOpen ? 'block' : 'hidden'} md:flex`}>
           {!isAuthenticated ? (
             <>
               <div title="Login">
