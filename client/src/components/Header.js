@@ -14,7 +14,7 @@ const Header = () => {
   return (
     <>
       {/* Search Bar at the Top */}
-      <div className="fixed inset-x-0 top-0 z-20  text-black p-2">
+      <div className="fixed inset-x-0 top-4 z-20  text-black p-2">
         <div className="max-w-screen-lg mx-auto">
           <input
             type="text"
@@ -26,13 +26,6 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Main Header */}
-      <div className="fixed inset-x-0 z-10 text-white mb-4">
-        <div className="max-w-screen-lg mx-auto flex items-center px-6 py-4">
-          {/* Logo or App name */}
-          <div className="text-2xl font-bold">Social Space</div>
-        </div>
-      </div>
 
       {/* Bottom Navigation */}
       <div className="fixed inset-x-0 bottom-0 z-10 bg-white text-black p-4">

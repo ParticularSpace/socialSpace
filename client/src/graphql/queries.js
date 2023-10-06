@@ -17,10 +17,6 @@ export const GET_USER_POSTS = gql`
           _id
           username
         }
-        createdAt
-        post {
-          _id
-        }
       }
       comments { 
         _id
@@ -90,34 +86,24 @@ export const GET_PERSONALIZED_POSTS = gql`
       photo
       createdAt
       user {
-        _id
         username
         profile_picture
       }
       likes {
-        _id
         user {
-          _id
           username
-        }
-        createdAt
-        post {
-
-          _id
         }
       }
       comments {
-        _id
         content
         user {
-          _id
           username
         }
-        createdAt
       }
     }
   }
 `;
+
 
 
 export const GET_USER_PIC = gql`
@@ -125,7 +111,6 @@ query GetUserPic($username: String!) {
   user(username: $username) {
     username
     profile_picture
-   
   }
 }
 `;
