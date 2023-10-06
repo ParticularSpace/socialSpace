@@ -95,13 +95,18 @@ export function Register() {
             onChange={(e) => setConfirmPassword(e.target.value)}
             className="w-full p-2 rounded border border-gray-300"
           />
-          <input 
-            type="date"
-            placeholder="Date of Birth"
-            value={dateOfBirth}
-            onChange={(e) => setDateOfBirth(e.target.value)}
-            className="w-full p-2 rounded border border-gray-300"
-          />
+          <label htmlFor="dob" className="block text-black text-sm font-medium">
+  Date of Birth
+</label>
+<div className="flex items-center">
+  <input 
+    id="dob"
+    type="date"
+    value={dateOfBirth}
+    onChange={(e) => setDateOfBirth(e.target.value)}
+    className="w-full p-2 rounded border border-gray-300 bg-white text-black"
+  />
+</div>
             <button 
     type="submit" 
     className="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50">
