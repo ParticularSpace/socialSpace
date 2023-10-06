@@ -1,8 +1,5 @@
 import React from "react";
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
-
-
-
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_ME } from "../graphql/queries";
 import {

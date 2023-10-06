@@ -2,10 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-.AppSc {
-  text-align: center;
-  height: 100vh;
-}
+
 
 .smContainer {
   display: flex;

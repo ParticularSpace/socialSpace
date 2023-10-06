@@ -1,23 +1,29 @@
 import decode from 'jwt-decode';
 
 class AuthService {
+  constructor() {
+    this.token = null;
+    this.decodedToken = null;
+  }
+
   getProfile() {
-    return decode(this.getToken());
+    if (!this.decodedToken) {
+      this.decodedToken = decode(this.getToken());
+    }
+    return this.decodedToken;
   }
 
   loggedIn() {
-    const token = this.getToken();
-    return !!token && !this.isTokenExpired(token);
+    return !!this.getToken() && !this.isTokenExpired();
   }
 
-  isTokenExpired(token) {
+  isTokenExpired() {
     try {
-      const decoded = decode(token);
-      if (decoded.exp < Date.now() / 1000) {
-        return true;
-      } else {
-        return false;
+      if (!this.decodedToken) {
+        this.decodedToken = decode(this.getToken());
       }
+
+      return this.decodedToken.exp < Date.now() / 1000;
     } catch (err) {
       console.error('Error decoding token:', err);
       // If there's an error, treat the token as expired
@@ -26,18 +32,30 @@ class AuthService {
   }
 
   getToken() {
-    return localStorage.getItem('id_token');
+    if (!this.token) {
+      this.token = localStorage.getItem('id_token');
+    }
+    return this.token;
   }
 
   login(idToken) {
+    this.token = idToken;
+    this.decodedToken = decode(idToken);
     localStorage.setItem('id_token', idToken);
     window.location.assign('/');
   }
   
   logout() {
+    this.token = null;
+    this.decodedToken = null;
     localStorage.removeItem('id_token');
     window.location.assign('/');
   }
 }
 
 export default new AuthService();
+
+export const isAuthenticated = () => {
+  const authService = new AuthService();
+  return authService.loggedIn();
+};

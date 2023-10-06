@@ -86,7 +86,7 @@ function CreatePost() {
         <div className="w-1/2 p-2 flex flex-col items-center justify-center">
           {preview && (
             <img
-              className="h-48 w-48 object-cover rounded-lg"
+              className="h-100 w-100 object-cover rounded-lg"
               src={preview}
               alt="Preview"
             />
