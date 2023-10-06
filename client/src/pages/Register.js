@@ -8,7 +8,6 @@ export function Register() {
   const [addUser] = useMutation(ADD_USER);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
-  const [dateOfBirth, setDateOfBirth] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);  // To hold error messages
@@ -17,7 +16,7 @@ export function Register() {
     event.preventDefault();
     setErrorMessage(null);  // Reset error message
 
-    if (!username || !email || !dateOfBirth || !password || !confirmPassword) {
+    if (!username || !email || !password || !confirmPassword) {
       setErrorMessage("All fields must be filled out");
       return;
     }
@@ -29,7 +28,7 @@ export function Register() {
 
     try {
       const { data } = await addUser({
-        variables: { username, email, date_of_birth: dateOfBirth, password },
+        variables: { username, email, password },
       });
 
       const token = data.addUser.token;
@@ -95,18 +94,7 @@ export function Register() {
             onChange={(e) => setConfirmPassword(e.target.value)}
             className="w-full p-2 rounded border border-gray-300"
           />
-          <label htmlFor="dob" className="block text-black text-sm font-medium">
-  Date of Birth
-</label>
-<div className="flex items-center">
-  <input 
-    id="dob"
-    type="date"
-    value={dateOfBirth}
-    onChange={(e) => setDateOfBirth(e.target.value)}
-    className="w-full p-2 rounded border border-gray-300 bg-white text-black"
-  />
-</div>
+          
             <button 
     type="submit" 
     className="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50">
@@ -121,7 +109,7 @@ export function Register() {
     <button 
       type="button" 
       onClick={() => navigate('/login')} 
-      className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
+      className=" text-blue-600 p-2 rounded hover:text-black focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
       Login
     </button>
   </div>

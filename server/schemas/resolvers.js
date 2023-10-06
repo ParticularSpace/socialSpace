@@ -253,7 +253,7 @@ const resolvers = {
 
     // WORKS FOR NOW DONT TOUCH
 
-    addUser: async (parent, { username, email, password, date_of_birth }) => {
+    addUser: async (parent, { username, email, password }) => {
       try {
         // Check if user already exists
         const existingUser = await User.findOne({ $or: [{ email }, { username }] });
@@ -261,7 +261,7 @@ const resolvers = {
           throw new Error('User with this email or username already exists.');
         }
     
-        const user = await User.create({ username, email, password, date_of_birth });
+        const user = await User.create({ username, email, password });
         const token = signToken(user);
     
         return { token, user };
