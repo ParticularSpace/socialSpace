@@ -10,7 +10,7 @@ const typeDefs = gql`
     _id: ID!
     username: String
     email: String!
-    date_of_birth: String!
+    date_of_birth: String
     profile_picture: String
     bio: String
     interests: [String]
@@ -74,7 +74,7 @@ type Query {
 
 type Mutation {
   login(email: String!, password: String!): Auth
-  addUser(username: String!, email: String!, date_of_birth: String!, password: String!): Auth
+  addUser(username: String!, email: String!, password: String!): Auth
   addFriend(friendId: ID!): User
   acceptFriendRequest(friendId: ID!): User
   declineFriendRequest(friendId: ID!): User

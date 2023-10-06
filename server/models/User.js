@@ -20,7 +20,7 @@ const UserSchema = new mongoose.Schema({
   },
   date_of_birth: {
     type: Date,
-    required: true,
+    required: false,
   },
   password: {
     type: String,

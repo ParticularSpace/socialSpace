@@ -14,6 +14,7 @@ import {
 import { GET_POST_BY_ID } from "../graphql/queries";
 import gql from "graphql-tag";
 
+// postcard to display posts
 export default function PostCard({ post }) {
   const { data, loading, error } = useQuery(GET_ME);
   const [likePost] = useMutation(LIKE_POST);
@@ -263,35 +264,35 @@ export default function PostCard({ post }) {
   console.log("Post object:", post);
 
   return (
-    <div className="relative bg-gray-200 rounded-lg w-96 h-auto border-2 border-gray-400 m-4">
+    <div className="relative bg-gray-200 rounded-lg w-full md:w-[600px] h-auto border-2 border-gray-400 m-4">
       {/* Profile Header Section */}
       <div className="bg-white p-2 flex rounded-lg items-center">
-        <img className="w-10 h-10 rounded-full" alt={post.user.username} src={post.user.profile_picture} />
-        <div className="ml-2 flex flex-col">
-          <h1 className="text-gray-700 text-sm font-semibold">{post.user.username}</h1>
+        <img className="w-10 md:w-14 h-10 md:h-14 rounded-full" alt={post.user.username} src={post.user.profile_picture} />
+        <div className="ml-2 md:ml-4 flex flex-col">
+          <h1 className="text-gray-700 text-sm md:text-lg font-semibold">{post.user.username}</h1>
         </div>
       </div>
-
+  
       {/* Conditional layout based on the presence of an image */}
       {post.photo ? (
         <>
           {/* Post Image */}
           <img
-            className="h-60 w-full object-cover"
+            className="h-40 md:h-[400px] w-full object-cover"
             src={post.photo ? post.photo : null}
             alt="Post"
           />
           {/* Post Content */}
-          <div className="p-4">
-            <p className="text-sm text-gray-700">
+          <div className="p-2 md:p-6">
+            <p className="text-sm md:text-md text-gray-700">
               {renderContentWithHashtags(post.content)}
             </p>
           </div>
         </>
       ) : (
-        <div className="p-4 flex flex-col items-center justify-center">
+        <div className="p-2 md:p-6 flex flex-col items-center justify-center">
           {/* Post Content */}
-          <p className="text-lg text-gray-700 mb-2 text-center">
+          <p className="text-sm md:text-xl text-gray-700 mb-2 text-center">
             {renderContentWithHashtags(post.content)}
           </p>
         </div>

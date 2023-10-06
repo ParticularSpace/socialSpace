@@ -13,119 +13,47 @@ const Header = () => {
   const isAuthenticated = localStorage.getItem('id_token');
 
   return (
-    <div className="fixed inset-x-0 z-10 text-white mb-4">
-      <div className="max-w-screen-lg mx-auto flex items-center px-6 py-4">
-        {/* Logo or App name */}
-        <div className="text-2xl font-bold md:block hidden start-0">
-          Social Space
-        </div>
-        
-        {/* Hamburger Menu */}
-        <div className="md:hidden">
-          <button onClick={() => setMenuOpen(!menuOpen)}>
-            <i className="fas fa-bars"></i>
-          </button>
-        </div>
-        
-        {/* Search Bar */}
-        <div className="flex items-center space-x-4 mx-4">
+    <>
+      {/* Search Bar at the Top */}
+      <div className="fixed inset-x-0 top-0 z-20  text-black p-4">
+        <div className="max-w-screen-lg mx-auto">
           <input
             type="text"
             placeholder="Search..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="p-2 rounded bg-white text-black"
+            className="p-2 rounded bg-gray-200 text-black w-full"
           />
         </div>
-        
-        {/* Navigation */}
-        <div className={`flex end space-x-4 ${menuOpen ? 'block' : 'hidden'} md:flex`}>
+      </div>
+
+      {/* Main Header */}
+      <div className="fixed inset-x-0 z-10 text-white mb-4">
+        <div className="max-w-screen-lg mx-auto flex items-center px-6 py-4">
+          {/* Logo or App name */}
+          <div className="text-2xl font-bold">Social Space</div>
+        </div>
+      </div>
+
+      {/* Bottom Navigation */}
+      <div className="fixed inset-x-0 bottom-0 z-10 bg-white text-black p-4">
+        <div className="max-w-screen-lg mx-auto flex justify-between">
           {!isAuthenticated ? (
             <>
-              <div title="Login">
-                <Link to="/login" className="text-xl hover:underline">
-                  Login
-                </Link>
-              </div>
-              <div title="Register">
-                <Link to="/register" className="text-xl hover:underline">
-                  Register
-                </Link>
-              </div>
+              <Link to="/login" className="text-xl hover:underline">Login</Link>
+              <Link to="/register" className="text-xl hover:underline">Register</Link>
             </>
           ) : (
             <>
-              <div title="Home">
-                <Link to="/home" className="text-xl hover:underline">
-                  Home
-                </Link>
-              </div>
-              <div title="Create Post">
-                <Link to="/createpost" className="text-xl hover:underline">
-                  Create Post
-                </Link>
-              </div>
-              <div title="Profile">
-                <Link to="/profile" className="text-xl hover:underline">
-                  Profile
-                </Link>
-              </div>
-              <div title="Logout">
-                <button onClick={logout} className="text-xl hover:underline">
-                  Logout
-                </button>
-              </div>
+              <Link to="/home" className="text-xl hover:underline">Home</Link>
+              <Link to="/createpost" className="text-xl hover:underline">Create Post</Link>
+              <Link to="/profile" className="text-xl hover:underline">Profile</Link>
+              <button onClick={logout} className="text-xl hover:underline">Logout</button>
             </>
           )}
         </div>
       </div>
-
-      {/* Mobile Menu */}
-      {menuOpen && (
-        <div className="md:hidden bg-white text-black p-4">
-         {/* Navigation */}
-        <div className="flex md:space-x-4 space-x-0 md:mb-0 mb-2">
-          {!isAuthenticated ? (
-            <>
-              <div title="Login">
-                <Link to="/login" className="text-xl hover:underline">
-                  Login
-                </Link>
-              </div>
-              <div title="Register">
-                <Link to="/register" className="text-xl hover:underline">
-                  Register
-                </Link>
-              </div>
-            </>
-          ) : (
-            <>
-              <div title="Home">
-                <Link to="/home" className="text-xl hover:underline">
-                  Home
-                </Link>
-              </div>
-              <div title="Create Post">
-                <Link to="/createpost" className="text-xl hover:underline">
-                  Create Post
-                </Link>
-              </div>
-              <div title="Profile">
-                <Link to="/profile" className="text-xl hover:underline">
-                  Profile
-                </Link>
-              </div>
-              <div title="Logout">
-                <button onClick={logout} className="text-xl hover:underline">
-                  Logout
-                </button>
-              </div>
-            </>
-          )}
-        </div>
-        </div>
-      )}
-    </div>
+    </>
   );
 };
 
