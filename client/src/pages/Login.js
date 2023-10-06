@@ -28,7 +28,7 @@ export function Login() {
       if (data.login.token) {
         window.location.replace("/home");
       }
-
+ 
     } catch (e) {
       console.error(e);
     }
