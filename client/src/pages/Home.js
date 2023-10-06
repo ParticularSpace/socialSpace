@@ -32,7 +32,7 @@ export default function Home() {
     const posts = data.userFeed;
 
     return (
-    <div className="flex flex-col items-center mt-8 md:mt-24">
+    <div className="flex flex-col items-center mt-8 md:mt-16">
             <div className="flex flex-wrap justify-around w-full">
                 <div className="overflow-y-auto overflow-x-hidden h-[80%] relative lg:items-start lg:justify-start items-center justify-center flex flex-col gap-y-0 lg:gap-y-4 md: mt-16" >
                     {posts.map((post) => (

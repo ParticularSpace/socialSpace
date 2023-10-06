@@ -36,26 +36,24 @@ export function Profile() {
 
   return (
     <div className="container mx-auto px-4 md:pt-16 pt-4 mt-16">
+    
       {/* Header */}
       <div className="fixed top-0 left-0 w-full bg-white z-10 md:hidden">
-        <Header />
-      </div>
-      <div className="fixed top-0 left-0 w-full bg-white z-10 hidden md:block">
         <Header />
       </div>
 
       {/* Profile section */}
       <div className="flex items-center mt-0">
-        <div className="w-1/4 ml-4">
+        <div className="w-1/4 ml-2">
       
             <button className={`relative mx-auto rounded-full hover:shadow-lg cursor-pointer w-20 h-20 md:w-32 md:h-32`} onClick={() => navigate('/edit-profile')} >
             {user.profile_picture && <img src={user.profile_picture} alt="Profile Avatar" className="w-full h-full rounded-full object-cover" />}
             </button>
           
         </div>
-
+    
         <div className="w-3/4 md:ml-6 ml-4">
-          <h1 className="text-2xl font-bold">{username}</h1>
+          <h1 className="text-2xl font-bold text-white">{username}</h1>
           <button
             className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200"
             onClick={() => navigate('/edit-profile')}
@@ -63,13 +61,13 @@ export function Profile() {
             Edit Profile
           </button>
 
-          <div className="flex mt-4">
+          <div className="flex mt-4 text-white">
             <div className="mr-8">
               <span className="text-lg font-bold">{userPosts.length}</span> posts
             </div>
-            <div className="mr-8 cursor-pointer" onClick={goToFriends}>
+            <div className="mr-8 cursor-pointer text-white" onClick={goToFriends}>
               {/* Replace '0' with actual data */}
-              <span className="text-lg font-bold">0</span> <span>followers</span>
+              <span className="text-lg font-bold text-white">0</span> <span>followers</span>
             </div>
             <div className="cursor-pointer" onClick={goToFriends}>
               {/* Replace '0' with actual data */}

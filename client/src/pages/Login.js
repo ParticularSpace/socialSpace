@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 export function Login() {
   const [formState, setFormState] = useState({ email: '', password: '' });
-  const [login, { error }] = useMutation(LOGIN_USER);
+  const [login] = useMutation(LOGIN_USER);
 
   const handleChange = event => {
     const { name, value } = event.target;

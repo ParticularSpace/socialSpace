@@ -9,13 +9,12 @@ const Header = () => {
   };
 
   const [searchQuery, setSearchQuery] = useState(''); // State for search query
-  const [menuOpen, setMenuOpen] = useState(false); // State to handle the hamburger menu
   const isAuthenticated = localStorage.getItem('id_token');
 
   return (
     <>
       {/* Search Bar at the Top */}
-      <div className="fixed inset-x-0 top-0 z-20  text-black p-4">
+      <div className="fixed inset-x-0 top-0 z-20  text-black p-2">
         <div className="max-w-screen-lg mx-auto">
           <input
             type="text"
