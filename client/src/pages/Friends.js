@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@apollo/client";
-import { GET_FRIENDS, GET_FOLLOWERS, GET_FOLLOWING, SEARCH_USERS } from "../graphql/queries";
+import { GET_FRIENDS, GET_FOLLOWERS, GET_FOLLOWING } from "../graphql/queries";
 import { ADD_FRIEND, ACCEPT_FRIEND_REQUEST, DECLINE_FRIEND_REQUEST, REMOVE_FRIEND } from "../graphql/mutations";
 
 const Friends = () => {
@@ -28,11 +28,6 @@ const Friends = () => {
   };
 
 
-  const [searchText, setSearchText] = useState("");
-  const { loading: loadingSearch, data: dataSearch } = useQuery(SEARCH_USERS, {
-    variables: { keyword: searchText }
-  });
-
   const handleAcceptFriendRequest = async (friendId) => {
     await acceptFriendRequest({ variables: { friendId } });
   };
@@ -46,33 +41,8 @@ const Friends = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      {/* Search Bar */}
-      <div className="mb-4">
-        <input
-          type="text"
-          placeholder="Search users..."
-          className="p-2 w-full border rounded"
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-        />
-      </div>
+    <div className="container mx-auto p-4 mt-16">
 
-      {/* Search Results */}
-      {loadingSearch ? (
-        <p className="text-gray-500">Searching...</p>
-      ) : dataSearch && dataSearch.searchUsers.length > 0 ? (
-        dataSearch.searchUsers.map((user) => (
-          <div key={user.id} className="bg-gray-100 p-2 rounded mb-2">
-            {user.username}
-            <button onClick={() => handleAddFriend(user.id)} className="bg-green-500 text-white p-2 rounded ml-2">
-              Add
-            </button>
-          </div>
-        ))
-      ) : (
-        <p className="text-gray-500">No users found.</p>
-      )}
       <h1 className="text-2xl font-bold mb-4">Friends</h1>
       {loadingFriends ? (
         <p className="text-gray-500">Loading friends...</p>
