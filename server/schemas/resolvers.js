@@ -86,12 +86,15 @@ const resolvers = {
       const user = await User.findOne({ username })
         .select('-__v -password')
         .populate('posts')
-        .populate('comments');
+        .populate('comments')
+        .populate('followers')
+        .populate('following');
       if (!user) {
         throw new Error(`User with username ${username} not found!`);
       }
       return user;
     },
+    
     post: async (parent, { _id }) => {
       const post = await Post.findById(_id)
         .populate({
@@ -146,7 +149,7 @@ const resolvers = {
         // Find comments by the given username
         const userComments = await Comment.find({ username: username });
 
-        console.log("userComments:", userComments);
+        
 
         return userComments || [];
       } catch (error) {
@@ -288,12 +291,12 @@ const resolvers = {
       return { token, user };
     },
     addPost: async (_, { content, photo }, context) => {
-      console.log("addPost resolver");
+     
 
       let photoUrl;
       if (context.user) {
         const hashtags = extractHashtags(content);
-        console.log("hashtags:", hashtags);
+       
 
         const moderatedContent = await moderateText(content);
 
@@ -301,13 +304,13 @@ const resolvers = {
           throw new Error('Your post contains inappropriate content.');
           return;
         }
-        console.log("Moderated content:", moderatedContent);
+        
 
         // Handle the photo upload if it exists
         if (photo) {
 
           const photoDetails = await photo;
-          console.log("photoDetails:", photoDetails);
+          
 
           // Check if createReadStream exists in photoDetails, and if it's a function
           if (typeof photoDetails.createReadStream !== "function") {
@@ -348,7 +351,7 @@ const resolvers = {
           { $push: { posts: post._id } },
           { new: true }
         );
-        console.log("User updated");
+        
         return post;
       }
 
@@ -581,7 +584,7 @@ const resolvers = {
     
       try {
         const avatarUrl = await uploadToS3(fileStream, uniqueFilename);
-        console.log("Uploaded avatar URL:", avatarUrl);
+        
     
         const updatedUser = await User.findByIdAndUpdate(
           { _id: user.user._id.toString() },
@@ -593,8 +596,7 @@ const resolvers = {
           throw new Error("User not found or update failed.");
         }
     
-        console.log("Updated user:", updatedUser);
-        return true; // Return the new avatar URL
+        
     
       } catch (error) {
         console.error('Error:', error);

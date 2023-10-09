@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import './App.css';
 import { Canvas } from '@react-three/fiber';
-import { Login, Register, Profile, Home, Header, CreatePost, EditProfile, Friends, LoadingScreen } from './components';
+import { Login, Register, Profile, Home, Header, CreatePost, EditProfile, Friends, LoadingScreen, ViewProfile } from './components';
 import { Stars } from './components/Background';
 
 import { isAuthenticated } from './utils/auth';
@@ -37,6 +37,9 @@ function AppContent() {
           <Route path="/home" element={<Home />} />
           <Route path="/createpost" element={<CreatePost />} />
           <Route path="/friends" element={<Friends />} />
+          <Route path="/view-profile/:username" element={<ViewProfile />} />
+
+
           <Route path="/" element={isAuthenticated() ? <Home /> : <Login />} />
         </Routes>
       </div>

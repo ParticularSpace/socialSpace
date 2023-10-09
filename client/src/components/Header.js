@@ -2,8 +2,12 @@ import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { SEARCH_USERS } from '../graphql/queries';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
+
+  const navigate = useNavigate();
+
   const logout = () => {
     localStorage.removeItem('id_token');
     window.location.replace('/');
@@ -17,12 +21,14 @@ const Header = () => {
     skip: !searchQuery
   });
 
-    // Function to handle click on username
-    const handleUserClick = (userId) => {
-      // Do something when a user is selected, e.g., navigate to user's profile
-    };
+  // Function to handle click on username
+  const handleUserClick = (userId, username) => {
+    navigate(`/view-profile/${username}`);
+    setSearchQuery('');
+  };
 
-  console.log("search_users data", data);
+
+
 
   return (
     <>
@@ -42,17 +48,15 @@ const Header = () => {
               {error && <div className="p-4">Error: {error.message}</div>}
               {data && data.searchUsers.length > 0 ? (
                 data.searchUsers.map(user => (
-                  <div 
-                    key={user._id} 
-                    onClick={() => handleUserClick(user._id)}
-                    className="cursor-pointer hover:bg-gray-200 p-4 border-b"
-                  >
+                  <div key={user._id} onClick={() => handleUserClick(user._id, user.username)}>
                     {user.username}
                   </div>
+
                 ))
               ) : (
-                <div className="p-4">No users found</div>
+                <div>No users found</div>
               )}
+
             </div>
           )}
         </div>

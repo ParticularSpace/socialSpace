@@ -18,6 +18,8 @@ const typeDefs = gql`
     comments: [Comment]
     likes: [Like]
     friends: [User]
+    followers: [User]
+    following: [User]
 }
 
 

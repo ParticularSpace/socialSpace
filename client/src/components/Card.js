@@ -151,7 +151,7 @@ export default function PostCard({ post }) {
       await likePost({
         variables: { postId },
         update: (cache, { data: { likePost } }) => {
-          console.log("likePost", likePost);
+          
 
           // This assumes that likePost mutation response contains _id of the post and the updated likes array.
           const updatedPost = likePost;
@@ -224,7 +224,7 @@ export default function PostCard({ post }) {
           `,
           });
 
-          console.log("Like removed successfully");
+        
 
           if (cachedPost) {
 
@@ -258,7 +258,7 @@ export default function PostCard({ post }) {
     }
   };
 
-  console.log("Post object:", post);
+ 
 
   return (
     <div className="relative bg-gray-200 rounded-lg w-full md:w-[600px] h-auto border-2 border-gray-400 m-4">

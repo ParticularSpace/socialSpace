@@ -31,9 +31,6 @@ export const GET_USER_POSTS = gql`
   }
 `;
 
-
-
-
 export const GET_POST_BY_ID = gql`
   query post($id: ID!) {
     post(id: $id) {
@@ -153,8 +150,6 @@ export const GET_FRIEND_REQUESTS = gql`
   }
 `;
 
-
-
 export const SEARCH_USERS = gql`
   query searchUsers($searchTerm: String!) {
     searchUsers(searchTerm: $searchTerm) {
@@ -164,3 +159,21 @@ export const SEARCH_USERS = gql`
   }
 `;
 
+export const FETCH_USER_PROFILE = gql`
+  query user($username: String!) {
+    user(username: $username) {
+      _id
+      username
+      profile_picture
+      bio
+      followers {
+        _id
+        username
+      }
+      following {
+        _id
+        username
+      }
+    }
+  }
+`;

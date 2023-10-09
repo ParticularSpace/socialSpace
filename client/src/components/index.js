@@ -8,3 +8,4 @@ export { default as CreatePost } from '../pages/CreatePost';
 export { default as EditProfile } from '../pages/EditProfile';
 export { default as Friends } from '../pages/Friends';
 export { default as LoadingScreen } from '../pages/LoadingScreen';
+export { default as ViewProfile } from '../pages/ViewProfile';
