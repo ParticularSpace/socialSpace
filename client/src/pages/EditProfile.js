@@ -6,17 +6,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
 
 const EditProfile = () => {
-  const [username, setUsername] = useState(''); // Initialize to current username
-  const [email, setEmail] = useState('');       // Initialize to current email
-  const [bio, setBio] = useState('');           // Initialize to current bio
-  const [profile_picture, setProfilePic] = useState(null); // Initialize to current 
+  const [username, setUsername] = useState(''); 
+  const [email, setEmail] = useState('');
+  const [bio, setBio] = useState('');
+  const [profile_picture, setProfilePic] = useState(null);
   const [updateProfile, { loading, error }] = useMutation(UPDATE_PROFILE);
   const [avatarLoading, setAvatarLoading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
 
-  const [avatarFile, setAvatarFile] = useState(null); // New state
-  const avatarFileInputRef = useRef(null);  // New ref
-  const [uploadAvatar] = useMutation(UPLOAD_AVATAR); // New mutation
+  const [avatarFile, setAvatarFile] = useState(null); 
+  const avatarFileInputRef = useRef(null);  
+  const [uploadAvatar] = useMutation(UPLOAD_AVATAR);
 
 // Function to handle avatar upload
 const handleUploadAvatar = async () => {
@@ -56,13 +56,12 @@ const handleAvatarFileChange = (event) => {
     if (username) updatedFields.username = username;
     if (email) updatedFields.email = email;
     if (bio) updatedFields.bio = bio;
-    if (profile_picture) updatedFields.profile_picture = profile_picture; // Changed to profile_picture
+    if (profile_picture) updatedFields.profile_picture = profile_picture;
 
     try {
-      // Execute the updateProfile mutation
       await updateProfile({
         variables: {
-          ...updatedFields  // Pass updated fields as variables to your mutation
+          ...updatedFields  
         }
       });
       return;
@@ -125,11 +124,6 @@ const handleAvatarFileChange = (event) => {
             {uploadSuccess && <span className="text-blue-500 mt-2">✓ Uploaded successfully</span>}
           </div>
 
-
-
-
-
-          Username
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
               Username

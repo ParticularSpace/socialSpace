@@ -153,7 +153,8 @@ export const GET_FRIEND_REQUESTS = gql`
   }
 `;
 
-// search for users
+
+
 export const SEARCH_USERS = gql`
   query searchUsers($searchTerm: String!) {
     searchUsers(searchTerm: $searchTerm) {

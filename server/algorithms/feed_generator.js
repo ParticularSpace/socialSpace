@@ -1,10 +1,11 @@
 const Post = require('../models/Post');
 const User = require('../models/User');
 
+
 // Mock example to add time decay factor
 function timeDecay(post, currentTime) {
     const timeDiff = currentTime - new Date(post.createdAt).getTime();
-    const decayFactor = Math.exp(-timeDiff / (1000 * 60 * 60 * 24 * 7));  // Decay over a week
+    const decayFactor = Math.exp(-timeDiff / (1000 * 60 * 60 * 24 * 7));  
     return post.likes.length * decayFactor;
 }
 

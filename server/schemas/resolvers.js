@@ -235,14 +235,13 @@ const resolvers = {
       if (!context.user) {
         throw new AuthenticationError('You need to be logged in!');
       }
-
+    
       const users = await User.find({ username: { $regex: searchTerm, $options: 'i' } })
-        .populate('friends')
-        .populate('friendRequests')
-        .populate('sentRequests');
-
+        .select('_id username');
+    
       return users;
     },
+    
 
 
   },
