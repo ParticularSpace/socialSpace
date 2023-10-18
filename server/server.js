@@ -49,11 +49,11 @@ const getUserFromToken = async (token) => {
       const user = await getUserFromToken(token);
       return { user };
     },
-    uploads: false,
+    uploads: false, 
   });
 
   await server.start();
-
+  
   app.use((req, res, next) => {
     if (req.is('text/*')) {
       req.text().then(txt => {

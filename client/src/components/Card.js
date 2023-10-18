@@ -258,8 +258,6 @@ export default function PostCard({ post }) {
     }
   };
 
- 
-
   return (
     <div className="relative bg-gray-200 rounded-lg w-full md:w-[600px] h-auto border-2 border-gray-400 m-4">
       {/* Profile Header Section */}
