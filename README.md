@@ -8,7 +8,7 @@ https://social-space-615b764ada9e.herokuapp.com/
 
 ## Description
 
-Social Space is a comprehensive social networking platform enabling users to connect, share, and interact effortlessly. It features user authentication, real-time chat, media uploads, and profile management through an intuitive GraphQL API.
+Social Space is a comprehensive social networking platform enabling users to connect, share, and interact effortlessly. It features user authentication, real-time chat, media uploads, and profile management through an intuitive GraphQL API. Im continuing to work on this project!
 
 ## Table of Contents
 
